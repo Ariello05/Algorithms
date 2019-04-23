@@ -20,10 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{694155AF-78E2-4D43-9F10-BC08397281F3}</ProjectGuid>
-    <RootNamespace>PriorityQueueAndDijkstra</RootNamespace>
+    <ProjectGuid>{F4A5881B-7B45-4B43-9FCE-3F383C252CA6}</ProjectGuid>
+    <RootNamespace>DijkstraPath</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
-    <ProjectName>PriorityQueueAndDijkstra</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -116,11 +115,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\PriorityQueueAndDijkstra\PriorityQueue.cpp" />
+    <ClCompile Include="Dijkstra.cpp" />
+    <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="Kruskal.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PriorityQueue.cpp" />
+    <ClCompile Include="Prim.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PriorityQueue.h" />
+    <ClInclude Include="..\PriorityQueueAndDijkstra\PriorityQueue.h" />
+    <ClInclude Include="Dijkstra.h" />
+    <ClInclude Include="Edge.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="Kruskal.h" />
+    <ClInclude Include="Prim.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PriorityQueueAndDijkstra\PriorityQueueAndDijkstra.vcxproj">
+      <Project>{694155af-78e2-4d43-9f10-bc08397281f3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
