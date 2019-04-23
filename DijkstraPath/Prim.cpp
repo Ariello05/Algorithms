@@ -20,7 +20,6 @@ void Prim::Run()
 	// E LOG V
 	while (!pq.isEmpty())
 	{
-		pq.print();
 		int u = pq.pop();
 		restricted[u] = true;
 
