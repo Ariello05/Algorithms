@@ -24,44 +24,66 @@ void autoDefine() {
 	edges[8] = Edge(1, 7, 8);
 	edges[9] = Edge(6, 7, 3);
 	Graph g(edges, n, m);
-	//Dijkstra d(g);
-	//d.Generate(4);
+	Dijkstra d(g);
+	d.Generate(4);
 	Prim prim(g);
 	prim.Run();
 	Kruskal k(g);
 	k.Run();
 }
 
-int main() {
-	autoDefine();
-	/*
-	int n, m;
-
+void Define(Edge *& edg, int & E, int & V) {
 	cout << "Type number of Vertices: " << endl;
-	cin >> n;
+	cin >> V;
 	cout << "Type number of Edges: " << endl;
-	cin >> m;
+	cin >> E;
 	cout << "Type m edges: [ ]" << endl;
-	Edge * edges = new Edge[m];
+	Edge * edges = new Edge[E];
 	unsigned int buff;
-	for (int i = 0; i < m; ++i) {
+	for (int i = 0; i < E; ++i) {
 		cout << "Type u:" << endl;
 		cin >> buff;
 		edges[i].v1 = buff;
 		cout << "Type v:" << endl;
 		cin >> buff;
-		edges[i].v2 = buff;	
+		edges[i].v2 = buff;
 		cout << "Type w:" << endl;
 		cin >> buff;
 		edges[i].weight = buff;
 		cout << "------NEW EDGE-------" << endl;
 	}
-	cout << "Type starting vertice!" << endl;
-	cin >> buff;
+	edg = edges;
+}
 
-	Graph g(edges,n);
-	g.Generate(1);
-	*/
+int main(int argc, char * argv[]) {
+	Edge * e;
+	int V, E;
+	if (argc < 2) {
+		Define(e,E,V);
+		int buff;
+		cout << "Type starting vertice!" << endl;
+		cin >> buff;
+		Graph g(e, V, E);
+		Dijkstra d(g);
+		d.Generate(buff);
+	}
+	else if (argv[1][1] == 'p') {
+		Define(e,E,V);
+		Graph g(e, V, E);
+		Prim p(g);
+		p.Run();
+	}
+	else if (argv[1][1] == 'k') {
+		Define(e, E, V);
+		Graph g(e, V, E);
+		Kruskal k(g);
+		k.Run();
+	}
+	else if (argv[1][1] == '-a'){
+		autoDefine();
+	}else{
+		cout << "Unkown arguments namely: " << argv[1] << ", use -k or -p" << endl;
+	}
 
 	int a;
 	std::cin >> a;

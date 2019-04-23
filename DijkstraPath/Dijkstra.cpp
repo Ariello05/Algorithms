@@ -1,5 +1,5 @@
 #include "Dijkstra.h"
-
+#include <ctime>
 
 #include "Graph.h"
 #include <limits>
@@ -18,6 +18,7 @@ Dijkstra::~Dijkstra()
 
 void Dijkstra::Generate(const unsigned int startingPoint)
 {
+	double begin = clock();
 	Prepare(startingPoint);
 	std::pair<int, unsigned int> * tab = new std::pair<int, unsigned int>[g.getVerticeSize() + 1];//index - current, first - previous, second - edge weigh
 	for (int i = 0; i < g.getVerticeSize() + 1; ++i) {
@@ -50,6 +51,8 @@ void Dijkstra::Generate(const unsigned int startingPoint)
 
 		}
 	}
+	double end = clock();
+	double time = double(end - begin) / CLOCKS_PER_SEC;
 
 	for (int i = 1; i <= g.getVerticeSize(); ++i) {
 		if (i != startingPoint) {
@@ -71,6 +74,8 @@ void Dijkstra::Generate(const unsigned int startingPoint)
 	for (int i = 1; i <= g.getVerticeSize(); ++i) {
 		std::cout << "  " << i << "\t\t" << distance[i] << std::endl;
 	}
+
+	std::cout << "CPU time elapsed: " << time << std::endl;
 
 }
 
