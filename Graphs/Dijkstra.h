@@ -1,5 +1,5 @@
 #pragma once
-#include "../PriorityQueueAndDijkstra/PriorityQueue.h"
+#include "../PriorityQueue/PriorityQueue.h"
 #include "Edge.h"
 #include "Graph.h"
 

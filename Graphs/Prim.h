@@ -1,6 +1,6 @@
 #pragma once
 #include "Graph.h"
-#include "../PriorityQueueAndDijkstra/PriorityQueue.h"
+#include "../PriorityQueue/PriorityQueue.h"
 
 class Prim {
 public:
