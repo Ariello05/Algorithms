@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PriorityQueue", "PriorityQueueAndDijkstra\PriorityQueueAndDijkstra.vcxproj", "{694155AF-78E2-4D43-9F10-BC08397281F3}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphs", "DijkstraPath\DijkstraPath.vcxproj", "{F4A5881B-7B45-4B43-9FCE-3F383C252CA6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PriorityQueue", "PriorityQueue\PriorityQueue.vcxproj", "{694155AF-78E2-4D43-9F10-BC08397281F3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sorting", "Sorting\Sorting.vcxproj", "{6FC8216E-EB67-4FD3-88A8-C51F266ED72B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "List", "List\List.vcxproj", "{389E2437-4658-4BB6-AC3C-65ABFF3E59C9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphs", "Graphs\Graphs.vcxproj", "{D50C61D9-E629-47C5-8984-37CD8C808D25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,14 +27,6 @@ Global
 		{694155AF-78E2-4D43-9F10-BC08397281F3}.Release|x64.Build.0 = Release|x64
 		{694155AF-78E2-4D43-9F10-BC08397281F3}.Release|x86.ActiveCfg = Release|Win32
 		{694155AF-78E2-4D43-9F10-BC08397281F3}.Release|x86.Build.0 = Release|Win32
-		{F4A5881B-7B45-4B43-9FCE-3F383C252CA6}.Debug|x64.ActiveCfg = Debug|x64
-		{F4A5881B-7B45-4B43-9FCE-3F383C252CA6}.Debug|x64.Build.0 = Debug|x64
-		{F4A5881B-7B45-4B43-9FCE-3F383C252CA6}.Debug|x86.ActiveCfg = Debug|Win32
-		{F4A5881B-7B45-4B43-9FCE-3F383C252CA6}.Debug|x86.Build.0 = Debug|Win32
-		{F4A5881B-7B45-4B43-9FCE-3F383C252CA6}.Release|x64.ActiveCfg = Release|x64
-		{F4A5881B-7B45-4B43-9FCE-3F383C252CA6}.Release|x64.Build.0 = Release|x64
-		{F4A5881B-7B45-4B43-9FCE-3F383C252CA6}.Release|x86.ActiveCfg = Release|Win32
-		{F4A5881B-7B45-4B43-9FCE-3F383C252CA6}.Release|x86.Build.0 = Release|Win32
 		{6FC8216E-EB67-4FD3-88A8-C51F266ED72B}.Debug|x64.ActiveCfg = Debug|x64
 		{6FC8216E-EB67-4FD3-88A8-C51F266ED72B}.Debug|x64.Build.0 = Debug|x64
 		{6FC8216E-EB67-4FD3-88A8-C51F266ED72B}.Debug|x86.ActiveCfg = Debug|Win32
@@ -51,6 +43,14 @@ Global
 		{389E2437-4658-4BB6-AC3C-65ABFF3E59C9}.Release|x64.Build.0 = Release|x64
 		{389E2437-4658-4BB6-AC3C-65ABFF3E59C9}.Release|x86.ActiveCfg = Release|Win32
 		{389E2437-4658-4BB6-AC3C-65ABFF3E59C9}.Release|x86.Build.0 = Release|Win32
+		{D50C61D9-E629-47C5-8984-37CD8C808D25}.Debug|x64.ActiveCfg = Debug|x64
+		{D50C61D9-E629-47C5-8984-37CD8C808D25}.Debug|x64.Build.0 = Debug|x64
+		{D50C61D9-E629-47C5-8984-37CD8C808D25}.Debug|x86.ActiveCfg = Debug|Win32
+		{D50C61D9-E629-47C5-8984-37CD8C808D25}.Debug|x86.Build.0 = Debug|Win32
+		{D50C61D9-E629-47C5-8984-37CD8C808D25}.Release|x64.ActiveCfg = Release|x64
+		{D50C61D9-E629-47C5-8984-37CD8C808D25}.Release|x64.Build.0 = Release|x64
+		{D50C61D9-E629-47C5-8984-37CD8C808D25}.Release|x86.ActiveCfg = Release|Win32
+		{D50C61D9-E629-47C5-8984-37CD8C808D25}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
