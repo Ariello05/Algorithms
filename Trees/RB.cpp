@@ -165,10 +165,6 @@ void RB::insertFix(node z)
 	node y;
 
 	while (z->parent != nullptr && z->parent->getColor() == RED) {
-		//if (z->parent->parent == nullptr) {
-		//	std::cout << "hmm" << std::endl;
-		//	break;
-		//}
 
 		if (z->parent == z->parent->parent->left) {// left subtree
 			y = z->parent->parent->right;
@@ -218,54 +214,54 @@ void RB::deleteFix(node x)
 	while (x != top && x->getColor() == BLACK) {
 		if (x == x->parent->left) {//left subtree
 			w = x->parent->right;
-			if (w->getColor() == RED) {
+			if (w->getColor() == RED) {//case1
 				w->setColor(BLACK);
 				x->parent->setColor(RED);
 				leftRotate(x->parent); 
 				w = x->parent->right;
 			}
-			if (w->getLeftColor() == BLACK && w->getRightColor() == BLACK) {
+			if (w->getLeftColor() == BLACK && w->getRightColor() == BLACK) {//case2
 				w->setColor(RED);
 				x = x->parent;
 			}
 			else {
-				if (w->getRightColor() == BLACK) {
+				if (w->getRightColor() == BLACK) {//change case 3 to case 4
 					w->left->setColor(BLACK);
 					w->setColor(RED);
 					rightRotate(w);
 					w = x->parent->right;
 				}
-				w->setColor(x->parent->getColor());
+				w->setColor(x->parent->getColor());//case4
 				x->parent->setColor(BLACK);
 				w->right->setColor(BLACK);
 				leftRotate(x->parent);
-				break;
+				break;//always fine here
 			}
 		}
 		else {//right subtree
 			w = x->parent->left;
-			if (w->getColor() == RED) {
+			if (w->getColor() == RED) {//case1
 				w->setColor(BLACK);
 				x->parent->setColor(RED);
 				rightRotate(x->parent);
 				w = x->parent->left;
 			}
-			if (w->getLeftColor() == BLACK && w->getRightColor() == BLACK) {
+			if (w->getLeftColor() == BLACK && w->getRightColor() == BLACK) {//case2
 				w->setColor(RED);
 				x = x->parent;
 			}
 			else {
-				if (w->getLeftColor() == BLACK) {
+				if (w->getLeftColor() == BLACK) {//change case 3 to case 4
 					w->right->setColor(BLACK);
 					w->setColor(RED);
 					leftRotate(w);
 					w = x->parent->left;
 				}
-				w->setColor(x->parent->getColor());
+				w->setColor(x->parent->getColor());//case4
 				x->parent->setColor(BLACK);
 				w->left->setColor(BLACK);
 				rightRotate(x->parent);
-				break;
+				break;//always fine here
 			}
 		}
 	}

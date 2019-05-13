@@ -16,7 +16,7 @@ public:
 	virtual void inOrder() override;
 	void bfs();
 private:
-	stringNode min(stringNode current);
+	stringNode min(stringNode current, stringNode& prev);
 	void print(stringNode n);
 	stringNode top;
 };

@@ -15,21 +15,20 @@ void BST::insert(string str)
 	else {
 		stringNode prev = top;
 		stringNode iter = top;
-		bool left;
 		while (iter != nullptr) {
+			prev = iter;
+
 			if (*iter > str) {
-				prev = iter;
 				iter = iter->left;
-				left = true;
 			}
 			else {
-				prev = iter;
 				iter = iter->right;
-				left = false;
 			}
 		}
+		
 		iter = new BSTNode<string>(str);
-		if (left) {
+		
+		if (*prev > str) {
 			prev->left = iter;
 		}
 		else {
@@ -43,11 +42,10 @@ void BST::remove(string str)
 {
 	stringNode prev = top;
 	stringNode iter = top;
-	bool left = true;
 	while (iter != nullptr) {
 		if (*iter == str) {
 			if (iter->right == nullptr && iter->left == nullptr) {//no children
-				if (left) {//subtree root update
+				if (*iter < *prev) {
 					prev->left = nullptr;
 				}
 				else {
@@ -55,8 +53,8 @@ void BST::remove(string str)
 				}
 
 				if (iter == top) {//delete root
-					top = nullptr;
 					delete top;
+					top = nullptr;
 				}
 				else {
 					delete iter;
@@ -64,7 +62,7 @@ void BST::remove(string str)
 				break;
 			}
 			else if(iter->right == nullptr) {//left children only
-				if (left) {//subtree root update
+				if (*iter < *prev) {
 					prev->left = iter->left;
 				}
 				else {
@@ -73,7 +71,7 @@ void BST::remove(string str)
 				break;
 			}
 			else if (iter->left == nullptr) {//right children only
-				if (left) {//subtree root update
+				if (*iter < *prev) {
 					prev->left = iter->right;
 				}
 				else {
@@ -82,33 +80,39 @@ void BST::remove(string str)
 				break;
 			}
 			else {//both children up
-				stringNode temp = min(iter->right);
-				if (left) {//subtree root update
-					prev->left = temp;
-				}
-				else {
-					prev->right = temp;
-				}
+				stringNode minPrev;//previous node to minN
+				stringNode minN = min(iter->right, minPrev);//minimum of right subtree
 
-				if (iter->right == temp) {//simpler case: right child is minimal
-					temp->left = iter->left;
+				if(iter->right == minN) {
+					minN->left = iter->left;
 				}
 				else {//harder case: have to translate right child left node to minimum right node
-					stringNode r = temp->right;
-					r->left = temp->right;
-					temp->right = r;
+					minPrev->left = minN->right;
+					minN->left = iter->left;
+					minN->right = iter->right; 
 				}
+
+				if (iter == top) {
+					top = minN;
+				}
+				else {
+					if (*iter < *prev) {
+						prev->left = minN;
+					}
+					else {
+						prev->right = minN;
+					}
+				}
+
 				delete iter;
 				break;
 			}
 		}
-		if (*iter > str) {
-			left = true;
+		else if (*iter > str) {
 			prev = iter;
 			iter = iter->left;
 		}
 		else {
-			left = false;
 			prev = iter;
 			iter = iter->right;
 		}
@@ -171,9 +175,10 @@ void BST::bfs()
 
 }
 
-stringNode BST::min(stringNode current)
+stringNode BST::min(stringNode current, stringNode & prev)
 {
 	while (current->left != nullptr) {
+		prev = current;
 		current = current->left;
 	}
 	return current;

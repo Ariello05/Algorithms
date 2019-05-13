@@ -17,6 +17,26 @@ public:
 		return value;
 	}
 
+	bool operator<= (T right) {
+		return value <= right;
+	}
+
+	bool operator>= (T right) {
+		return value >= right;
+	}
+
+	bool operator== (T right) {
+		return value == right;
+	}
+
+	bool operator> (T right) {
+		return value > right;
+	}
+
+	bool operator< (T right) {
+		return value < right;
+	}
+
 	BSTNode* left;
 	BSTNode* right;
 	T value;
@@ -47,14 +67,6 @@ public:
 		value = v;
 	}
 	~RBNode<T>() {
-		//if (left != nullptr && left->isSentinel()) {
-		//	delete left;
-		//	std::cout << "REMOVED" << std::endl;
-		//}
-		//if (right != nullptr && right->isSentinel()) {
-		//	delete right;
-		//	std::cout << "REMOVED" << std::endl;
-		//}
 	}
 
 	bool isSentinel() {
@@ -125,21 +137,6 @@ bool operator== (RBNode<T> left, T right) {
 
 template<class T>
 bool operator> (RBNode<T> left, T right) {
-	return left.value > right;
-}
-
-template<class T>
-bool operator<= (BSTNode<T> left, T right) {
-	return left.value <= right;
-}
-
-template<class T>
-bool operator== (BSTNode<T> left, T right) {
-	return left.value == right;
-}
-
-template<class T>
-bool operator> (BSTNode<T> left, T right) {
 	return left.value > right;
 }
 
