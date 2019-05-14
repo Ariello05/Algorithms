@@ -1,26 +1,17 @@
 #pragma once
-#include <iostream>
-#include "BSTNode.h"
-
 
 template<class T>
-class SplayNode{
+class BSTNode {
 public:
-	SplayNode<T>() : value() {
-		parent = nullptr;
+	BSTNode() :value() {
 		left = nullptr;
 		right = nullptr;
 	}
-	SplayNode<T>(T v) {
-		parent = nullptr;
-		left = nullptr;
-		right = nullptr;
+	BSTNode(T v) {
 		value = v;
+		left = nullptr;
+		right = nullptr;
 	}
-	~SplayNode<T>() {
-	}
-
-
 	operator T() {
 		return value;
 	}
@@ -45,31 +36,23 @@ public:
 		return value < right;
 	}
 
-	SplayNode* getLeftNode() {
+	BSTNode* getLeftNode() {
 		return left;
 	}
 
-	SplayNode* getRightNode() {
+	BSTNode* getRightNode() {
 		return right;
-	}
-
-	SplayNode* getParent() {
-		return parent;
 	}
 
 	T getValue() {
 		return value;
 	}
 
-	void setParent(SplayNode* parent) {
-		this->parent = parent;
-	}
-
-	void setRightNode(SplayNode* node) {
+	void setRightNode(BSTNode* node) {
 		right = node;
 	}
 
-	void setLeftNode(SplayNode* node) {
+	void setLeftNode(BSTNode* node) {
 		left = node;
 	}
 
@@ -77,17 +60,8 @@ public:
 		value = val;
 	}
 
-
 private:
-	SplayNode<T>* parent;
-	SplayNode<T>* left;
-	SplayNode<T>* right;
+	BSTNode* left;
+	BSTNode* right;
 	T value;
 };
-
-
-template<class T>
-std::ostream& operator<<(std::ostream& os, SplayNode<T>& rb) {
-	os <<rb.getValue();
-	return os;
-}

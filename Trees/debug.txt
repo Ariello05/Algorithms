@@ -1,0 +1,5 @@
+Insert: 
+	Checks: 11034538
+	Swaps: 3196480
+	Time[ms]: 2254
+

@@ -1,137 +1,179 @@
 #include "RB.h"
 #include <iostream>
 #include <deque>
+template class RB<string>;
 
-RB::RB()
+template<typename T>
+RB<T>::RB()
 {
-	top = new RBNode<string>();
+	top = new RBNode<T>();
 	top->setSentinel(true);
 }
 
-void RB::insert(string str)
+template<typename T>
+void RB<T>::insert(T str)
 {
-	node y = nullptr;
+	Tree<T>::insert(str);
 
-	node x = top;
+	RBNode<T>* y = nullptr;
+
+	RBNode<T>* x = top;
 	while (!(x->isSentinel())) {
 		y = x;
+		Tree<T>::checks+=2;//while + if
 		if (*x > str) {
-			x = x->left;
+			x = x->getLeftNode();
 		}
 		else {
-			x = x->right;
+			x = x->getRightNode();
 		}
 	}
-	node z = new RBNode<string>(str);
-	z->parent = y;
+	RBNode<T>* z = new RBNode<T>(str);
+	z->setParent(y);
+	Tree<T>::checks++;
 	if (y == nullptr) {
 		top = z;
+		Tree<T>::swaps++;
 	}
 	else if (*y > str) {
-		y->left = z;
+		Tree<T>::checks++;
+		y->setLeftNode(z);
+		Tree<T>::swaps++;
 	}
 	else {
-		y->right = z;
+		Tree<T>::checks++;
+		y->setRightNode(z);
+		Tree<T>::swaps++;
 	}
-	node leftSentinel = new RBNode<string>();
+	RBNode<T>* leftSentinel = new RBNode<T>();
 	leftSentinel->setSentinel(true);
-	node rightSentinel = new RBNode<string>();
+	RBNode<T>* rightSentinel = new RBNode<T>();
 	rightSentinel->setSentinel(true);
-	z->left = leftSentinel;
-	z->right = rightSentinel;
+	z->setLeftNode(leftSentinel);
+	z->setRightNode(rightSentinel);
+	Tree<T>::swaps += 4;
 
 	insertFix(z);
-
 }
 
-void RB::remove(string str)
+template<typename T>
+void RB<T>::remove(T str)
 {
-	node z = get(str);
+	Tree<T>::remove(str);
+
+	RBNode<T>* z = get(str);
+	Tree<T>::checks++;
 	if (z == nullptr) {
 		return;
 	}
 
-	node y = z;
-	node x;
-	COLOR og = y->getColor();
-	if (z->left->isSentinel()) {
-		x = z->right;
-		transplant(z, z->right);
-		delete z->left;
+	if (Tree<T>::size > 0) {
+		Tree<T>::size--;
 	}
-	else if (z->right->isSentinel()) {
-		x = z->left;
-		transplant(z, z->left);
-		delete z->right;
+
+	RBNode<T>* y = z;
+	RBNode<T>* x;
+	COLOR og = y->getColor();
+
+	if (z->getLeftNode()->isSentinel()) {
+		Tree<T>::checks++;
+		x = z->getRightNode();
+		transplant(z, z->getRightNode());
+		delete z->getLeftNode();
+	}
+	else if (z->getRightNode()->isSentinel()) {
+		Tree<T>::checks++;
+		x = z->getLeftNode();
+		transplant(z, z->getLeftNode());
+		delete z->getRightNode();
 	}
 	else {
-		y = min(z->right);					//   z
+		Tree<T>::checks++;
+		y = min(z->getRightNode());					//   z
 		og = y->getColor();					//     .
-		x = y->right;						//   y  
-		if (y->parent == z) {               //     x
-			x->parent = y;
+		x = y->getRightNode();						//   y  
+		Tree<T>::checks++;
+		if (y->getParent()== z) {               //     x
+			x->setParent(y);
+			Tree<T>::swaps++;
 		}
 		else {
-			transplant(y, y->right);
-			y->right = z->right;
-			y->right->parent = y;
+			transplant(y, y->getRightNode());
+			y->setRightNode(z->getRightNode());
+			Tree<T>::swaps+=2;
+			y->getRightNode()->setParent(y);
 		}
 		transplant(z, y);
-		delete y->left;//delete left sentinel
-		y->left = z->left;
-		y->left->parent = y;
+		delete y->getLeftNode();//delete left sentinel
+		y->setLeftNode(z->getLeftNode());
+		Tree<T>::swaps+=3;//++color
+		y->getLeftNode()->setParent(y);
 		y->setColor(z->getColor());
 	}
 	if (og == BLACK) {//if og was read tree will be balanced
+		Tree<T>::checks++;
 		deleteFix(x);
 	}
 	delete z;
 }
 
-void RB::search(string str)
+template<typename T>
+bool RB<T>::search(T str)
 {
-	node iter = top;
+	Tree<T>::search(str);
+
+	RBNode<T>* iter = top;
 	while (!iter->isSentinel()) {
+		Tree<T>::checks += 2;
 		if (*iter == str) {
-			std::cout << "1" << std::endl;
-			return;
+			return true;
 		}
+		Tree<T>::checks++;
 		if (*iter > str) {
-			iter = iter->left;
+			iter = iter->getLeftNode();
 		}
 		else {
-			iter = iter->right;
+			iter = iter->getRightNode();
 		}
 	}
-	std::cout << "0" << std::endl;
+	return false;
 }
 
-void RB::inOrder()
+template<typename T>
+void RB<T>::inOrder()
 {
-	printf("\n =inOrder= \n");
+	Tree<T>::inOrder();
+
+	printf("=inOrder= \n");
+	Tree<T>::checks++;
+	if (top == nullptr) {
+		std::cout << "Empty...\n";
+		return;
+	}
 	print(top);
 }
 
-void RB::bfs()
+template<typename T>
+void RB<T>::bfs()
 {
-	printf("\n =BFS= \n");
-	if (!top->isSentinel()) {
-		std::deque<RBNode<string>> deq;
+	printf("=BFS= \n");
+	if (top != nullptr && !top->isSentinel()) {
+		std::deque<RBNode<T>> deq;
 		deq.push_back(*top);
-		RBNode<string> temp;
+		RBNode<T> temp;
 		while (!deq.empty()) {
 			temp = deq.front();
 			std::cout << deq.front();
 			deq.pop_front();
-			if (!temp.left->isSentinel()) {
-				deq.push_back(*temp.left);
+			if (!temp.getLeftNode()->isSentinel()) {
+				deq.push_back(*temp.getLeftNode());
 				std::cout << "\t<-- \t";
 			}
 			else {
 				std::cout << "\t";
 			}
-			if (!temp.right->isSentinel()) {
-				deq.push_back(*temp.right);
+			if (!temp.getRightNode()->isSentinel()) {
+				deq.push_back(*temp.getRightNode());
 				std::cout << "-->";
 			}
 			std::cout << std::endl;
@@ -143,203 +185,274 @@ void RB::bfs()
 	}
 }
 
-node RB::get(string str)
+template<typename T>
+node<T> RB<T>::get(T str)
 {
-	node iter = top;
+	RBNode<T>* iter = top;
 	while (!iter->isSentinel()) {
+		Tree<T>::checks+=2;
 		if (*iter == str) {
 			return iter;
 		}
+		Tree<T>::checks++;
 		if (*iter > str) {
-			iter = iter->left;
+			iter = iter->getLeftNode();
 		}
 		else {
-			iter = iter->right;
+			iter = iter->getRightNode();
 		}
 	}
 	return nullptr;
 }
 
-void RB::insertFix(node z)
+template<typename T>
+void RB<T>::insertFix(node<T> z)
 {
-	node y;
+	RBNode<T>* y;
 
-	while (z->parent != nullptr && z->parent->getColor() == RED) {
+	while (z->getParent() != nullptr && z->getParent()->getColor() == RED) {
+		Tree<T>::checks+=3;//while + below if
 
-		if (z->parent == z->parent->parent->left) {// left subtree
-			y = z->parent->parent->right;
+		if (z->getParent() == z->getParent()->getParent()->getLeftNode()) {// left subtree
+			Tree<T>::checks+=2;//below if
+			y = z->getParent()->getParent()->getRightNode();
+
 			if (!y->isSentinel() && y->getColor() == RED) {// red aunt
-				z->parent->setColor(BLACK);
+				Tree<T>::swaps+=3;
+				z->getParent()->setColor(BLACK);
 				y->setColor(BLACK);
-				z->parent->parent->setColor(RED);
-				z = z->parent->parent;
+				z->getParent()->getParent()->setColor(RED);
+				z = z->getParent()->getParent();
 			}
 			else {// black aunt
-				if (z == z->parent->right) {
-					z = z->parent;
+				if (z == z->getParent()->getRightNode()) {
+					Tree<T>::checks++;
+					z = z->getParent();
 					leftRotate(z);
 				}
-				z->parent->setColor(BLACK);
-				z->parent->parent->setColor(RED);
-				rightRotate(z->parent->parent);
+				Tree<T>::swaps+=2;
+				z->getParent()->setColor(BLACK);
+				z->getParent()->getParent()->setColor(RED);
+				rightRotate(z->getParent()->getParent());
 			}
 		}
 		else {// right subtree
-			y = z->parent->parent->left;
+			Tree<T>::checks+=2;//below if
+			y = z->getParent()->getParent()->getLeftNode();
+
 			if (!y->isSentinel() && y->getColor() == RED) {// red aunt
-				z->parent->setColor(BLACK);
+				Tree<T>::swaps += 3;
+				z->getParent()->setColor(BLACK);
 				y->setColor(BLACK);
-				z->parent->parent->setColor(RED);
-				z = z->parent->parent;
+				z->getParent()->getParent()->setColor(RED);
+				z = z->getParent()->getParent();
 			}
 			else {// black aunt
-				if (z == z->parent->left) {
-					z = z->parent;
+				if (z == z->getParent()->getLeftNode()) {
+					Tree<T>::checks++;
+					z = z->getParent();
 					rightRotate(z);
 				}
-				z->parent->setColor(BLACK);
-				z->parent->parent->setColor(RED);
-				leftRotate(z->parent->parent);
+				Tree<T>::swaps += 2;
+				z->getParent()->setColor(BLACK);
+				z->getParent()->getParent()->setColor(RED);
+				leftRotate(z->getParent()->getParent());
 			}
 		}
 	}
+	Tree<T>::swaps++;
 	top->setColor(BLACK);
 }
 
-void RB::deleteFix(node x)
+template<typename T>
+void RB<T>::deleteFix(node<T> x)
 {
 	//printf("\nmiddlebfs\n");
 	//bfs();
-	node w;
+	RBNode<T>* w;
 	while (x != top && x->getColor() == BLACK) {
-		if (x == x->parent->left) {//left subtree
-			w = x->parent->right;
+		Tree<T>::checks+=3;//while+if
+
+		if (x == x->getParent()->getLeftNode()) {//left subtree
+			w = x->getParent()->getRightNode();
+			Tree<T>::checks++;//color below
 			if (w->getColor() == RED) {//case1
+				Tree<T>::swaps+=2;//color twice
 				w->setColor(BLACK);
-				x->parent->setColor(RED);
-				leftRotate(x->parent); 
-				w = x->parent->right;
+				x->getParent()->setColor(RED);
+				leftRotate(x->getParent()); 
+				w = x->getParent()->getRightNode();
 			}
+			Tree<T>::checks+=2;
 			if (w->getLeftColor() == BLACK && w->getRightColor() == BLACK) {//case2
+				Tree<T>::swaps++;
 				w->setColor(RED);
-				x = x->parent;
+				x = x->getParent();
 			}
 			else {
+				Tree<T>::checks++;
 				if (w->getRightColor() == BLACK) {//change case 3 to case 4
-					w->left->setColor(BLACK);
+					Tree<T>::swaps+=2;
+					w->getLeftNode()->setColor(BLACK);
 					w->setColor(RED);
 					rightRotate(w);
-					w = x->parent->right;
+					w = x->getParent()->getRightNode();
 				}
-				w->setColor(x->parent->getColor());//case4
-				x->parent->setColor(BLACK);
-				w->right->setColor(BLACK);
-				leftRotate(x->parent);
+				Tree<T>::swaps+=3;//3 below
+				w->setColor(x->getParent()->getColor());//case4
+				x->getParent()->setColor(BLACK);
+				w->getRightNode()->setColor(BLACK);
+				leftRotate(x->getParent());
 				break;//always fine here
 			}
 		}
 		else {//right subtree
-			w = x->parent->left;
+			w = x->getParent()->getLeftNode();
+			Tree<T>::checks++;
 			if (w->getColor() == RED) {//case1
+				Tree<T>::swaps+=2;
 				w->setColor(BLACK);
-				x->parent->setColor(RED);
-				rightRotate(x->parent);
-				w = x->parent->left;
+				x->getParent()->setColor(RED);
+				rightRotate(x->getParent());
+				w = x->getParent()->getLeftNode();
 			}
+			Tree<T>::checks+=2;
 			if (w->getLeftColor() == BLACK && w->getRightColor() == BLACK) {//case2
+				Tree<T>::swaps++;
 				w->setColor(RED);
-				x = x->parent;
+				x = x->getParent();
 			}
 			else {
+				Tree<T>::checks++;
 				if (w->getLeftColor() == BLACK) {//change case 3 to case 4
-					w->right->setColor(BLACK);
+					Tree<T>::swaps+=2;
+					w->getRightNode()->setColor(BLACK);
 					w->setColor(RED);
 					leftRotate(w);
-					w = x->parent->left;
+					w = x->getParent()->getLeftNode();
 				}
-				w->setColor(x->parent->getColor());//case4
-				x->parent->setColor(BLACK);
-				w->left->setColor(BLACK);
-				rightRotate(x->parent);
+				Tree<T>::swaps+=3;
+				w->setColor(x->getParent()->getColor());//case4
+				x->getParent()->setColor(BLACK);
+				w->getLeftNode()->setColor(BLACK);
+				rightRotate(x->getParent());
 				break;//always fine here
 			}
 		}
 	}
+	Tree<T>::swaps++;
 	x->setColor(BLACK);
 }
 
-void RB::transplant(node x, node y)
+template<typename T>
+void RB<T>::transplant(node<T> x, node<T> y)
 {
-	if (x->parent == nullptr) {//top
+	Tree<T>::checks++;
+	if (x->getParent() == nullptr) {//top
 		top = y;
-		return;
+		Tree<T>::swaps++;
 	}
-	else if (x == x->parent->left) {
-		x->parent->left = y;
+	else if (x == x->getParent()->getLeftNode()) {
+		Tree<T>::checks++;
+		x->getParent()->setLeftNode(y);
+		Tree<T>::swaps++;
 	}
 	else {
-		x->parent->right = y;
+		Tree<T>::checks++;
+		x->getParent()->setRightNode(y);
+		Tree<T>::swaps++;
 	}
 
 	//if(y != nullptr)	
-	y->parent = x->parent;
+	y->setParent(x->getParent());
+	Tree<T>::swaps++;
 }
 
-node RB::min(node current)
+template<typename T>
+node<T> RB<T>::min(node<T> current)
 {
-	while (!current->left->isSentinel()) {
-		current = current->left;
+	while (!current->getLeftNode()->isSentinel()) {
+		Tree<T>::checks++;
+		current = current->getLeftNode();
 	}
 	return current;
 }
 
-void RB::leftRotate(node x)					//     x		     y
+template<typename T>
+void RB<T>::leftRotate(node<T> x)					//     x		     y
 {											//   a   y    ->   x   c
-	node y = x->right;						//		b  c      a  b
-	x->right = y->left;//b switch					
-	if (!y->left->isSentinel()) {
-		y->left->parent = x;// b parent			
+	RBNode<T>* y = x->getRightNode();				//		b  c      a  b
+	x->setRightNode(y->getLeftNode());//b switch	
+	Tree<T>::swaps++;
+	Tree<T>::checks++;
+	if (!y->getLeftNode()->isSentinel()) {
+		y->getLeftNode()->setParent(x);// b parent		
+		Tree<T>::swaps++;
 	}
-	y->parent = x->parent;// parent switch
-	if (x->parent == nullptr) {
+	y->setParent(x->getParent());// parent switch
+	Tree<T>::swaps++;
+	Tree<T>::checks++;
+	if (x->getParent() == nullptr) {
 		top = y;//tree root
+		Tree<T>::swaps++;
 	}
-	else if (x == x->parent->left) {
-		x->parent->left = y;//switch left parent node
+	else if (x == x->getParent()->getLeftNode()) {
+		Tree<T>::checks++;
+		x->getParent()->setLeftNode(y);//switch left parent node
+		Tree<T>::swaps++;
 	}
 	else {
-		x->parent->right = y;//switch right parent node
+		Tree<T>::checks++;
+		x->getParent()->setRightNode(y);//switch right parent node
+		Tree<T>::swaps++;
 	}
-	y->left = x;// x left subtree
-	x->parent = y;// parent y
+	y->setLeftNode(x);// x left subtree
+	Tree<T>::swaps++;
+	x->setParent(y);// parent y
+	Tree<T>::swaps++;
 }
 
-void RB::rightRotate(node y)				//	   y		   x	
+template<typename T>
+void RB<T>::rightRotate(node<T> y)				//	   y		   x	
 {											//   x   c    -> a   y   
-	node x = y->left;						//  a  b	       b   c 
-	y->left = x->right;//b switch					
-	if (!x->right->isSentinel()) {
-		x->right->parent = y;// b parent			
+	RBNode<T>* x = y->getLeftNode();				//  a  b	       b   c 
+	y->setLeftNode(x->getRightNode());//b switch	
+	Tree<T>::swaps++;
+	Tree<T>::checks++;
+	if (!x->getRightNode()->isSentinel()) {
+		x->getRightNode()->setParent(y);// b parent			
+		Tree<T>::swaps++;
 	}
-	x->parent = y->parent;// parent switch
-	if (y->parent == nullptr) {
-		top = y;//tree root
+	x->setParent(y->getParent());// parent switch
+	Tree<T>::swaps++;
+	if (y->getParent()  == nullptr) {
+		Tree<T>::checks++;
+		top = x;//tree root
+		Tree<T>::swaps++;
 	}
-	else if (y == y->parent->left) {
-		y->parent->left = x;//switch left parent node
+	else if (y == y->getParent()->getLeftNode()) {
+		Tree<T>::checks++;
+		y->getParent()->setLeftNode(x);//switch left parent node
+		Tree<T>::swaps++;
 	}
 	else {
-		y->parent->right = x;//switch right parent node
+		Tree<T>::checks++;
+		y->getParent()->setRightNode(x);//switch right parent node
+		Tree<T>::swaps++;
 	}
-	x->right = y;// y right subtree
-	y->parent = x;// parent x
+	x->setRightNode(y);// y right subtree
+	Tree<T>::swaps+=2;
+	y->setParent(x);// parent x
 }
 
-void RB::print(node n)//dfs
+template<typename T>
+void RB<T>::print(node<T> n)//dfs
 {
 	if (!n->isSentinel()) {
-		print(n->left);
-		std::cout << *n << std::endl;
-		print(n->right);
+		//Tree<T>::checks++;
+		print(n->getLeftNode());
+		std::cout << n->getValue() << std::endl;
+		print(n->getRightNode());
 	}
 }
+

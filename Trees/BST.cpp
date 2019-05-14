@@ -3,104 +3,135 @@
 #include <deque>
 using std::string;
 
-BST::BST() {
+template class BST<string>;
+
+template <typename T>
+BST<T>::BST() {
 	top = nullptr;
 }
 
-void BST::insert(string str)
+template <typename T>
+void BST<T>::insert(T str)
 {
+	Tree<T>::insert(str);
+
 	if (top == nullptr) {
-		top = new BSTNode<string>(str);
+		top = new BSTNode<T>(str);
+		Tree<T>::swaps++;
 	}
 	else {
-		stringNode prev = top;
-		stringNode iter = top;
+		stringNode<T> prev = top;
+		stringNode<T> iter = top;
 		while (iter != nullptr) {
 			prev = iter;
 
+			Tree<T>::checks+=2;//while + below
 			if (*iter > str) {
-				iter = iter->left;
+				iter = iter->getLeftNode();
 			}
 			else {
-				iter = iter->right;
+				iter = iter->getRightNode();
 			}
 		}
 		
-		iter = new BSTNode<string>(str);
-		
+		iter = new BSTNode<T>(str);
+		Tree<T>::checks++;
 		if (*prev > str) {
-			prev->left = iter;
+			prev->setLeftNode(iter);
 		}
 		else {
-			prev->right = iter;
+			prev->setRightNode(iter);
 		}
+		Tree<T>::swaps++;
 	}
 }
 
 
-void BST::remove(string str)
+
+template <typename T>
+void BST<T>::remove(T str)
 {
-	stringNode prev = top;
-	stringNode iter = top;
+	Tree<T>::remove(str);
+
+	stringNode<T> prev = top;
+	stringNode<T> iter = top;
 	while (iter != nullptr) {
+		Tree<T>::checks+=2;
 		if (*iter == str) {
-			if (iter->right == nullptr && iter->left == nullptr) {//no children
+			if (Tree<T>::size > 0) {
+				Tree<T>::size--;
+			}
+
+			Tree<T>::checks+=2;
+			if (iter->getRightNode() == nullptr && iter->getLeftNode() == nullptr) {//no children
+				Tree<T>::checks++;
 				if (*iter < *prev) {
-					prev->left = nullptr;
+					prev->setLeftNode(nullptr);
 				}
 				else {
-					prev->right = nullptr;
+					prev->setRightNode(nullptr);
 				}
+				Tree<T>::swaps++;
 
+				Tree<T>::checks++;
 				if (iter == top) {//delete root
 					delete top;
 					top = nullptr;
+					Tree<T>::swaps++;
 				}
 				else {
 					delete iter;
 				}
 				break;
 			}
-			else if(iter->right == nullptr) {//left children only
+			else if(iter->getRightNode() == nullptr) {//left children only
+				Tree<T>::checks+=2;
 				if (*iter < *prev) {
-					prev->left = iter->left;
+					prev->setLeftNode(iter->getLeftNode());
 				}
 				else {
-					prev->right = iter->left;
+					prev->setRightNode(iter->getLeftNode());
 				}
+				Tree<T>::swaps++;
 				break;
 			}
-			else if (iter->left == nullptr) {//right children only
+			else if (iter->getLeftNode() == nullptr) {//right children only
+				Tree<T>::checks+=2;
 				if (*iter < *prev) {
-					prev->left = iter->right;
+					prev->setLeftNode(iter->getRightNode());
 				}
 				else {
-					prev->right = iter->right;
+					prev->setRightNode(iter->getRightNode());
 				}
+				Tree<T>::swaps++;
 				break;
 			}
 			else {//both children up
-				stringNode minPrev;//previous node to minN
-				stringNode minN = min(iter->right, minPrev);//minimum of right subtree
-
-				if(iter->right == minN) {
-					minN->left = iter->left;
+				stringNode<T> minPrev;//previous node to minN
+				stringNode<T> minN = min(iter->getRightNode(), minPrev);//minimum of right subtree
+				Tree<T>::checks+=2;
+				if(iter->getRightNode() == minN) {
+					minN->setLeftNode(iter->getLeftNode());
+					Tree<T>::swaps++;
 				}
 				else {//harder case: have to translate right child left node to minimum right node
-					minPrev->left = minN->right;
-					minN->left = iter->left;
-					minN->right = iter->right; 
+					minPrev->setLeftNode(minN->getRightNode());
+					minN->setLeftNode(iter->getLeftNode());
+					minN->setRightNode(iter->getRightNode()); 
+					Tree<T>::swaps+=3;
 				}
-
+				Tree<T>::checks++;
 				if (iter == top) {
 					top = minN;
+					Tree<T>::swaps++;
 				}
 				else {
+					Tree<T>::checks++;
 					if (*iter < *prev) {
-						prev->left = minN;
+						prev->setLeftNode(minN);
 					}
 					else {
-						prev->right = minN;
+						prev->setRightNode(minN);
 					}
 				}
 
@@ -109,60 +140,75 @@ void BST::remove(string str)
 			}
 		}
 		else if (*iter > str) {
+			Tree<T>::checks++;
 			prev = iter;
-			iter = iter->left;
+			iter = iter->getLeftNode();
 		}
 		else {
 			prev = iter;
-			iter = iter->right;
+			Tree<T>::checks++;
+			iter = iter->getRightNode();
 		}
 	}
 }
 
-void BST::search(string str)
+template <typename T>
+bool BST<T>::search(T str)
 {
-	stringNode iter = top;
+	Tree<T>::search(str);
+
+	stringNode<T> iter = top;
 	while (iter != nullptr) {
+		Tree<T>::checks+=2;
 		if (*iter == str) {
-			std::cout << "1" << std::endl;
-			return;
+			return true;
 		}
+		Tree<T>::checks++;
 		if (*iter > str) {
-			iter = iter->left;
+			iter = iter->getLeftNode();
 		}
 		else {
-			iter = iter->right;
+			iter = iter->getRightNode();
 		}
 	}
-	std::cout << "0" << std::endl;
+	return false;
 }
 
-void BST::inOrder()
+template <typename T>
+void BST<T>::inOrder()
 {
-	printf("\n =inOrder= \n");
+	Tree<T>::inOrder();
+
+	printf("=inOrder= \n");
+	Tree<T>::checks++;
+	if (top == nullptr) {
+		std::cout << "Empty...\n";
+		return;
+	}
 	print(top);
 }
 
-void BST::bfs()
+template <typename T>
+void BST<T>::bfs()
 {
-	printf("\n =BFS= \n");
+	printf("=BFS= \n");
 	if (top != nullptr) {
-		std::deque<BSTNode<string>> deq;
+		std::deque<BSTNode<T>> deq;
 		deq.push_back(*top);
-		BSTNode<string> temp;
+		BSTNode<T> temp;
 		while (!deq.empty()) {
 			temp = deq.front();
-			std::cout << deq.front().value;
+			std::cout << deq.front().getValue();
 			deq.pop_front();
-			if (temp.left != nullptr) {
-				deq.push_back(*temp.left);
+			if (temp.getLeftNode() != nullptr) {
+				deq.push_back(*temp.getLeftNode());
 				std::cout << "\t<-- \t";
 			}
 			else {
 				std::cout << "\t";
 			}
-			if (temp.right != nullptr) {
-				deq.push_back(*temp.right);
+			if (temp.getRightNode() != nullptr) {
+				deq.push_back(*temp.getRightNode());
 				std::cout << "-->";
 			}
 			std::cout << std::endl;
@@ -175,21 +221,25 @@ void BST::bfs()
 
 }
 
-stringNode BST::min(stringNode current, stringNode & prev)
+template <typename T>
+stringNode<T> BST<T>::min(stringNode<T> current, stringNode<T>& prev)
 {
-	while (current->left != nullptr) {
+	while (current->getLeftNode() != nullptr) {
+		Tree<T>::checks++;
 		prev = current;
-		current = current->left;
+		current = current->getLeftNode();
 	}
 	return current;
 }
 
-void BST::print(stringNode n)//dfs
+template <typename T>
+void BST<T>::print(stringNode<T> n)//dfs
 {
 	if (n != nullptr) {
-		print(n->left);
-		std::cout << n->value << std::endl;
-		print(n->right);
+		//Tree<T>::checks++;
+		print(n->getLeftNode());
+		std::cout << n->getValue() << std::endl;
+		print(n->getRightNode());
 	}
 }
 

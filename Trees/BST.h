@@ -1,24 +1,26 @@
 #pragma once
 #include <string>
 #include "Tree.h"
-#include "Node.h"
+#include "BSTNode.h"
 
 using std::string;
 
-using stringNode = BSTNode<string>*;
+template <typename T>
+using stringNode = BSTNode<T>*;
 
-class BST :Tree<string> {
+template <typename T>
+class BST :public Tree<T> {
 public:
 	BST();
-	virtual void insert(string) override;
-	virtual void remove(string) override;
-	virtual void search(string) override;
+	virtual void insert(T) override;
+	virtual void remove(T) override;
+	virtual bool search(T) override;
 	virtual void inOrder() override;
-	void bfs();
+	virtual void bfs();
 private:
-	stringNode min(stringNode current, stringNode& prev);
-	void print(stringNode n);
-	stringNode top;
+	stringNode<T> min(stringNode<T> current, stringNode<T>& prev);
+	void print(stringNode<T> n);
+	stringNode<T> top;
 };
 
 
