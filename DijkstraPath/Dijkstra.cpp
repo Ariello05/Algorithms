@@ -42,13 +42,6 @@ void Dijkstra::Generate(const unsigned int startingPoint)
 				v = g.getEdges()[i].v2;
 				CheckDistance(v, curr, weight, tab); // log 
 			}
-			else if (g.getEdges()[i].v2 == curr) {// v2 starting point \ so two side directed graph = undirected
-				weight = g.getEdges()[i].weight;
-
-				v = g.getEdges()[i].v1;
-				CheckDistance(v, curr, weight, tab); // log 
-			}
-
 		}
 	}
 	double end = clock();
