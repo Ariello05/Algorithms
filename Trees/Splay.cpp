@@ -30,7 +30,7 @@ void Splay<T>::insert(T val)
 		add->setParent(node);
 		Tree<T>::swaps++;
 		Tree<T>::checks++;
-		if (*node > val) {//connect to left subtree
+		if (*node >= val) {//connect to left subtree
 			add->setLeftNode(node->getLeftNode());
 			node->setLeftNode(add);
 			Tree<T>::swaps+=2;
@@ -57,15 +57,17 @@ template<typename T>
 void Splay<T>::remove(T val)
 {
 	Tree<T>::remove(val);
+	//inOrder();
 	Tree<T>::checks++;
 	if (top != nullptr) {//empty tree
-		if (splay(top, val)->getValue() == val) {//if searched value exists
+		splay(top, val);
+
+		if (top->getValue() == val) {//if searched value exists
 			if (Tree<T>::size > 0) {
 				Tree<T>::size--;
 			}
 
 			SplayNode<T>* left = top->getLeftNode();
-			//bfs();
 			SplayNode<T>* right = top->getRightNode();
 
 			delete top;
@@ -73,26 +75,30 @@ void Splay<T>::remove(T val)
 
 			Tree<T>::checks++;
 			if (left == nullptr) {
+				if(right != nullptr)
+					right->setParent(nullptr);
 				top = right;//right subtree
 				Tree<T>::swaps++;
 			}
-			else {//left tree is not empty
-				left->setParent(nullptr);
-				Tree<T>::swaps++;
-				top = splay(left, val);//new top from maximum left subtree
-
-				top->setRightNode(right);//connect to right subtree
-				Tree<T>::swaps++;
-				Tree<T>::checks++;
-				if (right != nullptr) {
-					right->setParent(top);
-					Tree<T>::swaps++;
-				}
-			}
-			if(top != nullptr)
+			else {//left tree is not empty 
+				top = left;
 				top->setParent(nullptr);
 
-			Tree<T>::swaps++;
+				top = splay(top, val);
+				while (top->getRightNode() != nullptr) {//we rotate duplicates
+					leftRotate(top);
+				}
+
+				top->setRightNode(right);//right subtree
+				if (right != nullptr) {
+					right->setParent(top);
+				}
+				top->setParent(nullptr);
+				Tree<T>::swaps++;
+			}
+		}
+		else {
+			std::cout << "didnt find: " << val << std::endl;
 		}
 	}
 }
@@ -156,8 +162,12 @@ SplayNode<T>* Splay<T>::splay(SplayNode<T>* root, T x)
 		temp = prev;//previous node													 
 	}
 	
-	while (temp->getParent() != nullptr) {											 
+	while (true) {											 
 		Tree<T>::checks+=2;
+
+		if (temp->getParent() == nullptr) {
+			break;
+		}
 
 		if (temp->getParent()->getParent() == nullptr) {
 			Tree<T>::checks++;

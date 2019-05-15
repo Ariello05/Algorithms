@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graphs", "Graphs\Graphs.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Trees", "Trees\Trees.vcxproj", "{A67429CC-92F5-4ACE-A416-9DB285FBDC56}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Randomizer", "Randomizer\Randomizer.vcxproj", "{A5C8BD25-D476-47A7-BD9C-ADE5A164AEED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{A67429CC-92F5-4ACE-A416-9DB285FBDC56}.Release|x64.Build.0 = Release|x64
 		{A67429CC-92F5-4ACE-A416-9DB285FBDC56}.Release|x86.ActiveCfg = Release|Win32
 		{A67429CC-92F5-4ACE-A416-9DB285FBDC56}.Release|x86.Build.0 = Release|Win32
+		{A5C8BD25-D476-47A7-BD9C-ADE5A164AEED}.Debug|x64.ActiveCfg = Debug|x64
+		{A5C8BD25-D476-47A7-BD9C-ADE5A164AEED}.Debug|x64.Build.0 = Debug|x64
+		{A5C8BD25-D476-47A7-BD9C-ADE5A164AEED}.Debug|x86.ActiveCfg = Debug|Win32
+		{A5C8BD25-D476-47A7-BD9C-ADE5A164AEED}.Debug|x86.Build.0 = Debug|Win32
+		{A5C8BD25-D476-47A7-BD9C-ADE5A164AEED}.Release|x64.ActiveCfg = Release|x64
+		{A5C8BD25-D476-47A7-BD9C-ADE5A164AEED}.Release|x64.Build.0 = Release|x64
+		{A5C8BD25-D476-47A7-BD9C-ADE5A164AEED}.Release|x86.ActiveCfg = Release|Win32
+		{A5C8BD25-D476-47A7-BD9C-ADE5A164AEED}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

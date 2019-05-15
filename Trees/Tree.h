@@ -49,7 +49,7 @@ public:
 		file.close();
 	}
 	void searchFromFile(std::string f) {
-		loadCount++;
+		//loadCount++;
 		std::ifstream file(f);
 		if (!file.is_open()) {
 			std::cerr << "Can't find file!\n";
@@ -76,7 +76,7 @@ public:
 		file.close();
 	}
 	void deleteFromFile(std::string f) {
-		loadCount++;
+		//loadCount++;
 		std::ifstream file(f);
 		if (!file.is_open()) {
 			std::cerr << "Can't find file!\n";
@@ -95,6 +95,8 @@ public:
 					i++;
 				}
 				if (newvar != "") {
+					//std::cerr << "\tDELETE: " << newvar << std::endl;
+
 					remove(static_cast<T>(newvar));
 					newvar.clear();
 				}
