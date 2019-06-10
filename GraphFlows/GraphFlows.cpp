@@ -36,8 +36,7 @@ extern int runTest(bool bi, std::string file);
 
 int main(int argc, char *argv[])
 {
-	
-	srand(time(NULL));
+	srand(time(NULL));	
 
 	if (argc <= 2) {
 		std::cerr << "--size k (optional)--degree i (optional)[--glpk, --test] name ";
@@ -57,6 +56,10 @@ int main(int argc, char *argv[])
 	for (int i = 0; i < strV.size(); ++i)
 	{
 		try {
+			if (strV[i] == nullptr) {
+				continue;
+			}
+
 			if (contains(strV[i], "--size"))
 			{
 				++i;
@@ -92,12 +95,12 @@ int main(int argc, char *argv[])
 			std::cerr << "k is undefined";
 			return 0;
 		}
-		if (j == -1) {
-			std::cerr << "i is undefined";
-			return 0;
-		}
 
 		if (bi) {
+			if (j == -1) {
+				std::cerr << "i is undefined";
+				return 0;
+			}
 			return runNormal(k, j);
 		}
 		else {
@@ -109,12 +112,12 @@ int main(int argc, char *argv[])
 			std::cerr << "k is undefined";
 			return 0;
 		}
-		if (j == -1) {
-			std::cerr << "i is undefined";
-			return 0;
-		}
 
 		if (bi) {
+			if (j == -1) {
+				std::cerr << "i is undefined";
+				return 0;
+			}
 			return runGLPK(k, j, fileName);
 		}
 		else {
@@ -134,8 +137,15 @@ int runGLPK(int k, int i, std::string file)
 	Graph* t;
 	t = new Bipartite(k, i);
 	GLPKCreator::make(t,file);
-	return 1;
+	std::cout << "GPLK created, CTRL+C to stop control Check \n";
+	EdmondsKarp ek(t);
+	auto start = std::chrono::high_resolution_clock::now();
+	std::cout << "max = " << ek.run() << std::endl;
+	auto end = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+	std::cerr << "Time elapsed(seconds): " << duration.count() << endl;
 
+	return 1;
 }
 
 int runGLPK(int k, std::string file)
@@ -143,8 +153,15 @@ int runGLPK(int k, std::string file)
 	Graph* t;
 	t = new HyperCube(k);
 	GLPKCreator::make(t, file);
-	return 1;
+	std::cout << "GPLK created, CTRL+C to stop control Check \n";
+	EdmondsKarp ek(t);
+	auto start = std::chrono::high_resolution_clock::now();
+	std::cout << "max = " << ek.run() << std::endl;
+	auto end = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+	std::cerr << "Time elapsed(seconds): " << duration.count() << endl;
 
+	return 1;
 }
 
 int runNormal(int k, int i)
@@ -155,7 +172,7 @@ int runNormal(int k, int i)
 	t = new Bipartite(k, i);
 	EdmondsKarp ek(t);
 
-	ek.run();
+	std::cout << "max = " << ek.run() << std::endl;
 	auto end = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
 	std::cerr << "Time elapsed(seconds): " << duration.count() << endl;
@@ -173,7 +190,7 @@ int runNormal(int k)
 	t = new HyperCube(k);
 	EdmondsKarp ek(t);
 
-	ek.run();
+	std::cout << "max = " << ek.run() << std::endl;
 	auto end = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
 	std::cerr << "Time elapsed(seconds): " << duration.count() << endl;
@@ -188,31 +205,52 @@ int runTest(bool bi, std::string fileName)
 	std::ofstream file(fileName);
 
 	if (bi) {//run for all
-		file << "k\t i\t avg fmax\t avg routes\n";
+		file << "k i fmax\n";
 		double sum;
-		int first = 1024;// 2^10
+		// 3 1024
+		// 4 512
+		// 5 256
+		// 6 128
+		// 7 64
+		// 8 32
+		// 9 32
+		// 10 32
+		int first = 512;// 2^9
 		for (unsigned int k = 3; k <= 10; ++k) {
-			for (unsigned int i = 1; i < k; ++i) {
+			for (unsigned int i = 1; i <= k; ++i) {
 				Graph* hc = new Bipartite(k,i);
 				EdmondsKarp ek(hc);
 				sum = 0.0;
 				for (int l = first; l >= 0; --l) {
 					sum += (double)ek.run() / double(first);
 				}
-				if (first >= 16) {
-					first /= 2;
-				}
 				file << k << " " << i << " " << sum << endl;
 
 				delete hc;
 			}
-			first = 1024;
+			if (first >= 64) {
+				first /= 2;
+			}
 		}
 	}
 	else {
-		file << "k\t avg fmax\t avg routes\n";
+		file << "k fmax routes\n";
 		double sum;
 		double routes;
+		// 3 1024
+		// 4 512
+		// 5 256
+		// 6 128
+		// 7 64
+		// 8 32
+		// 9 16
+		// 10 8
+		// 11 8
+		// 12 8
+		// 13 8
+		// 14 8
+		// 15 8
+		// 16 8
 		int first = 1024;// 2^10
 		for (unsigned int k = 1; k <= 16; ++k) {
 			Graph* hc = new HyperCube(k);

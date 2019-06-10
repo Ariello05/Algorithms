@@ -140,8 +140,6 @@ int EdmondsKarp::run()
 		}
 	}
 
-	std::cout << "max = " << fmax << std::endl;
-
 	delete[] prev;
 	delete[] CFP;
 	return fmax;

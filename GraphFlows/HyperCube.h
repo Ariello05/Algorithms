@@ -19,6 +19,5 @@ private:
 	int lastVertice;
 	
 	List** vect;
-
 };
 

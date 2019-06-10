@@ -21,7 +21,7 @@ void GLPKCreator::make(Graph* g, std::string fileName)
 	myfile << "param n, integer, >= 2;" << endl << endl;
 
 	myfile << "/* Set of nodes: */" << endl;
-	myfile << "set V, default {1..n};" << endl << endl;
+	myfile << "set V, default {0..n};" << endl << endl;
 
 	myfile << "/* Set of arcs: */" << endl;
 	myfile << "set E, within V cross V;" << endl << endl;
@@ -30,7 +30,7 @@ void GLPKCreator::make(Graph* g, std::string fileName)
 	myfile << "param a{(i,j) in E}, > 0;" << endl << endl;
 
 	myfile << "/* Beginning and End: */" << endl;
-	myfile << "param s, symbolic, in V, default 1;" << endl;
+	myfile << "param s, symbolic, in V, default 0;" << endl;
 	myfile << "param t, symbolic, in V, != s, default n;" << endl << endl;
 
 	myfile << "/* Elementray flow through arc(i,j): */" << endl;
@@ -55,7 +55,7 @@ void GLPKCreator::make(Graph* g, std::string fileName)
 	myfile << "/* Array: */" << endl << endl;
 
 	myfile << "data;" << endl;
-	myfile << "param n :=" << g->getAmount() << ";" << endl;
+	myfile << "param n :=" << g->getAmount()-1 << ";" << endl;
 	myfile << "param : E :   a :=";
 
 	List** pars = g->getNeighbourList();

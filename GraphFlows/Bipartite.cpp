@@ -6,6 +6,9 @@
 
 Bipartite::Bipartite(unsigned int k, unsigned int i)
 {
+	if (i > k) {
+		throw std::exception("Has to be i <= k");
+	}
 	this->k = k;
 	this->i = i;
 	sizeV = pow(2, k);
@@ -31,9 +34,9 @@ Bipartite::Bipartite(unsigned int k, unsigned int i)
 
 	List* d;
 	for (int j = 1; j <= sizeV; ++j) {
-		valid = false;
 		while (l_size < i) {
 			int ran = std::rand() % sizeV + sizeV + 1;
+			valid = false;
 
 			while (!valid) {
 				valid = true;
