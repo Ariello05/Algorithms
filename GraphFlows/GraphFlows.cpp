@@ -205,66 +205,84 @@ int runTest(bool bi, std::string fileName)
 	std::ofstream file(fileName);
 
 	if (bi) {//run for all
-		file << "k i fmax\n";
+		file << "k i fmax time(ms)\n";
 		double sum;
-		// 3 1024
-		// 4 512
-		// 5 256
-		// 6 128
-		// 7 64
-		// 8 32
-		// 9 32
-		// 10 32
-		int first = 512;// 2^9
+		double times;
+		// 3 4096
+		// 4 2048
+		// 5 1024
+		// 6 512
+		// 7 256
+		// 8 128
+		// 9 128
+		// 10 128
+		int first = 4096;// 2^12
 		for (unsigned int k = 3; k <= 10; ++k) {
 			for (unsigned int i = 1; i <= k; ++i) {
+
 				Graph* hc = new Bipartite(k,i);
 				EdmondsKarp ek(hc);
 				sum = 0.0;
+				times = 0.0;
 				for (int l = first; l >= 0; --l) {
-					sum += (double)ek.run() / double(first);
+					auto start = std::chrono::high_resolution_clock::now();
+					sum += (double)ek.run() / double(first);//shuffle in run
+					auto end = std::chrono::high_resolution_clock::now();
+					auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+					times += duration.count() / double(first);
 				}
-				file << k << " " << i << " " << sum << endl;
+				file << k << " " << i << " " << sum << " " << times << endl;
 
 				delete hc;
 			}
-			if (first >= 64) {
+			if (first >= 256) {
 				first /= 2;
 			}
 		}
 	}
 	else {
-		file << "k fmax routes\n";
+		file << "k fmax routes time(ms)\n";
 		double sum;
 		double routes;
-		// 3 1024
-		// 4 512
-		// 5 256
-		// 6 128
-		// 7 64
-		// 8 32
-		// 9 16
-		// 10 8
-		// 11 8
-		// 12 8
-		// 13 8
-		// 14 8
-		// 15 8
-		// 16 8
-		int first = 1024;// 2^10
+		double times;
+		
+		// approx 1h
+		// 3 2048
+		// 4 1024
+		// 5 512
+		// 6 256
+		// 7 128
+		// 8 64
+		// 9 32
+		// 10 32
+		// 11 32
+		// 12 32
+		// 13 32
+		// 14 32
+		// 15 32
+		// 16 32
+		int first = 2048;// 2^10
 		for (unsigned int k = 1; k <= 16; ++k) {
+
 			Graph* hc = new HyperCube(k);
 			EdmondsKarp ek(hc);
 			sum = 0.0;
 			routes = 0.0;
+			times = 0.0;
 			for (int i = first; i >= 0; --i) {
-				sum += (double)ek.run() / double(first);
+				auto start = std::chrono::high_resolution_clock::now();
+				sum += (double)ek.run() / double(first);//shuffle in hypercube
 				routes += (double)ek.getLastRoutes() / double(first);
+				std::cout << k << " " << i << " " << ek.getLastRoutes() << std::endl;
+				auto end = std::chrono::high_resolution_clock::now();
+				auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+				times += duration.count() /double(first);
 			}
-			if (first >= 16) {
+			if (first >= 64) {
 				first /= 2;
 			}
-			file << k << " " << sum << " " << routes << endl;
+
+			file << k << " " << sum << " " << routes << " " << times << endl;
 
 			delete hc;
 		}
