@@ -1,9 +1,9 @@
 #include "Prim.h"
 #include <iostream>
 
-void Prim::Run()
+void Prim::Run(int startingPoint)
 {
-	Prepare();
+	Prepare(startingPoint);
 	int E = g.getEdgesSize();
 
 	int *parent = new int[E];
@@ -36,9 +36,11 @@ void Prim::Run()
 	}
 
 	int sumW = 0;
-	for (int i = 2; i <= g.getVerticeSize(); ++i) {
-		std::cout << "(u, v, w): " << parent[i] << " " << i << " " <<  parentWeight[i] << std::endl;
-		sumW += parentWeight[i];
+	for (int i = 1; i <= g.getVerticeSize(); ++i) {
+		if (i != startingPoint) {
+			std::cout << "(u, v, w): " << parent[i] << " " << i << " " << parentWeight[i] << std::endl;
+			sumW += parentWeight[i];
+		}
 	}
 	std::cout << "Weight: " << sumW << std::endl;
 }
@@ -51,16 +53,15 @@ Prim::Prim(Graph graph)
 	restricted = new bool[g.getVerticeSize() + 1];//1..n
 }
 
-void Prim::Prepare()
+void Prim::Prepare(int startingPoint)
 {
 	for (int i = 1; i <= g.getVerticeSize(); i++) {
 		distance[i] = INT_MAX;
 		restricted[i] = false;
 	}
-	int inital = 1;// first vertex to check
 
-	distance[inital] = 0;//key
-	pq.insert(0, inital);
+	distance[startingPoint] = 0;//key
+	pq.insert(0, startingPoint);
 }
 
 void Prim::CheckDistance(int v, int u, int weight, int *& parent, int *& parentW)

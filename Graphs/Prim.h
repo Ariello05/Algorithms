@@ -4,12 +4,12 @@
 
 class Prim {
 public:
-	void Run();
+	void Run(int st);
 	Prim(Graph g);
 
 private:
 
-	void Prepare();
+	void Prepare(int st);
 	void CheckDistance(int v, int u, int weight, int *& parent, int *& parentW);
 
 	int * distance;
