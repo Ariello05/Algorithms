@@ -2,6 +2,7 @@
 #include <utility>
 #include <random>
 #include <time.h>
+#include <boost/random.hpp>
 
 int getH(int x) {
 	unsigned int c; // c accumulates the total bits set in v
@@ -41,6 +42,9 @@ int next(int initial, int current) {
 
 HyperCube::HyperCube(unsigned int k)
 {
+	std::time_t now = std::time(0);
+	gen = boost::random::mt19937 { static_cast<std::uint32_t>(now) };
+
 	lastVertice = pow(2, k);
 	vect = new List*[lastVertice];
 	for (int i = 0; i < lastVertice; ++i) {
@@ -143,7 +147,9 @@ void HyperCube::shuffle()
 				a1 = b2;
 			}
 			int max = pow(2, a1);
-			int rand = std::rand() % max + 1;
+			boost::random::uniform_int_distribution<> dist{ 1, max };
+			//std::cout << dist(gen) << '\n';
+			int rand = dist(gen);
 			begin->val.capacity = rand;
 			begin = begin->next;
 		}

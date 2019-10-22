@@ -101,9 +101,23 @@ int main(int argc, char *argv[])
 				std::cerr << "i is undefined";
 				return 0;
 			}
+			if (j > k || j <= 0) {
+				std::cerr << "i should be <= k > 0";
+				return 0;
+			}
+			if (k > 16 || k < 1) {
+				std::cerr << "k: {1,..,16}";
+				return 0;
+			}
+
 			return runNormal(k, j);
 		}
 		else {
+			if (k > 16 || k < 1) {
+				std::cerr << "k: {1,..,16}";
+				return 0;
+			}
+
 			return runNormal(k);
 		}
 	}
@@ -179,7 +193,6 @@ int runNormal(int k, int i)
 
 	delete t;
 	return 1;
-
 }
 
 int runNormal(int k)
@@ -205,7 +218,7 @@ int runTest(bool bi, std::string fileName)
 	std::ofstream file(fileName);
 
 	if (bi) {//run for all
-		file << "k i fmax time(ms)\n";
+		file << "k i fmax time(mms)\n";
 		double sum;
 		double times;
 		// 3 4096
@@ -224,7 +237,7 @@ int runTest(bool bi, std::string fileName)
 				EdmondsKarp ek(hc);
 				sum = 0.0;
 				times = 0.0;
-				for (int l = first; l >= 0; --l) {
+				for (int l = first; l > 0; --l) {
 					auto start = std::chrono::high_resolution_clock::now();
 					sum += (double)ek.run() / double(first);//shuffle in run
 					auto end = std::chrono::high_resolution_clock::now();
@@ -247,12 +260,14 @@ int runTest(bool bi, std::string fileName)
 		double times;
 		
 		// approx 1h
-		// 3 2048
-		// 4 1024
-		// 5 512
-		// 6 256
-		// 7 128
-		// 8 64
+		// 1 2048
+		// 2 1024
+		// 3 512
+		// 4 256
+		// 5 128
+		// 6 64
+		// 7 32
+		// 8 32
 		// 9 32
 		// 10 32
 		// 11 32
@@ -269,13 +284,13 @@ int runTest(bool bi, std::string fileName)
 			sum = 0.0;
 			routes = 0.0;
 			times = 0.0;
-			for (int i = first; i >= 0; --i) {
+			for (int i = first; i > 0; --i) {
 				auto start = std::chrono::high_resolution_clock::now();
 				sum += (double)ek.run() / double(first);//shuffle in hypercube
 				routes += (double)ek.getLastRoutes() / double(first);
 				std::cout << k << " " << i << " " << ek.getLastRoutes() << std::endl;
 				auto end = std::chrono::high_resolution_clock::now();
-				auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+				auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 				times += duration.count() /double(first);
 			}
 			if (first >= 64) {

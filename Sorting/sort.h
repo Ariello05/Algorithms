@@ -9,6 +9,11 @@ using std::cout;
 using std::endl;
 using std::cerr;
 
+namespace data{
+	void sort(int tab[]);
+}
+
+
 typedef struct counter_t {
 	int checks;
 	int swaps;

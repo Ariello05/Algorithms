@@ -1,5 +1,8 @@
 #pragma once
 #include "Graph.h"
+#include <time.h>
+#include <ctime>
+#include <boost/random.hpp>
 
 class HyperCube : public Graph
 {
@@ -17,6 +20,8 @@ private:
 	unsigned int k;
 	void addEdge(int u, int v);
 	int lastVertice;
+	std::time_t now;
+	boost::random::mt19937 gen;
 	
 	List** vect;
 };

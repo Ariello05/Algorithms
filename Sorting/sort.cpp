@@ -298,7 +298,7 @@ void mQS(int tab[], int p, int r, counter_s &checks, bool(*f)(int * tab, int j, 
 		mIS(tab, p, r, checks, asc);
 	}
 	else {
-		int q = partition3m(tab,p,r,counter,f);
+		int q = partition3m(tab,p,r,checks,f);
 	}
 }
 

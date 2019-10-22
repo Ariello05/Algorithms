@@ -6,6 +6,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <fstream>
+#include <vector>
+#include "Sorter.h"
+#include "QuickSort.h"
 
 using std::cout;
 using std::endl;
@@ -13,8 +16,33 @@ using std::rand;
 using std::cerr;
 using std::cin;
 
+extern int mainProgram(int argc, char *agrv[]);
+extern int testProgram(int argc, char *agrv[]);
+
 int main(int argc, char *agrv[]) {
-	
+	srand(time(NULL));
+	//return mainProgram(argc, agrv);
+	return testProgram(argc, agrv);
+}
+
+int testProgram(int argc, char *argv[]) {
+	std::vector<int> vecti;
+	vecti.push_back(2);
+	vecti.push_back(4);
+
+	int tab[10];
+	for (int i = 0; i < 10; ++i) {
+		tab[i] = std::rand() % 100;
+	}
+	QuickSort<int>qs2;
+	qs2.sort(tab, 10);
+	for (int i = 0; i < 10; ++i) {
+		cout << tab[i] << endl;
+	}
+	return 1;
+}
+
+int mainProgram(int argc, char *agrv[]) {
 	if (argc <= 2) {
 		cerr << "(--type select|insert|heap|quick --asc|--desc) | (--stat nazwapliku)";
 		return 0;
@@ -122,7 +150,7 @@ int main(int argc, char *agrv[]) {
 
 			for (int i = 0; i < k; ++i) {
 				generate(tab[0], n, 0, 10000);
-				copyArray(tab[0], tab[1],n);
+				copyArray(tab[0], tab[1], n);
 				copyArray(tab[0], tab[2], n);
 				copyArray(tab[0], tab[3], n);
 
@@ -135,7 +163,7 @@ int main(int argc, char *agrv[]) {
 				counters[1] = insertionSort(tab[1], n, true);
 				end = clock();
 				times[1] = double(end - begin) / CLOCKS_PER_SEC;
-				
+
 				begin = clock();
 				counters[2] = heapSort(tab[2], n, true);
 				end = clock();
@@ -176,49 +204,5 @@ int main(int argc, char *agrv[]) {
 		cerr << "Unkown first argument namely: " << agrv[1] << "\tsuspected --type | --stat" << endl;
 		return 0;
 	}
-	/*
-	
-	srand(time(0));
-	const int SIZE = 10000;
-	int tab[SIZE];
 
-	generate(tab, SIZE, 0, 100000);
-	int *cp = copyArray(tab, SIZE);
-	int *cp2 = copyArray(tab, SIZE);
-	int *cp3 = copyArray(tab, SIZE);
-
-	//printArray(tab, SIZE);
-
-	counter_s i1 = selectSort(tab, SIZE,true);
-	counter_s i2 = insertionSort(cp, SIZE, true);
-	counter_s i3 = heapSort(cp2, SIZE, true);
-	counter_s i4 = quickSort(cp3, SIZE, true);
-	cout << "I1: Compares:" << i1.checks << "\tSwaps:" << i1.swaps << endl;
-	cout << "I2: Compares:" << i2.checks << "\tSwaps:" << i2.swaps << endl;
-	cout << "I3: Compares:" << i3.checks << "\tSwaps:" << i3.swaps << endl;
-	cout << "I4: Compares:" << i4.checks << "\tSwaps:" << i4.swaps << endl;
-
-	if (!isSorted(tab,SIZE,true)) {
-	cout << "ARRAY NOT SORTED" << endl;
-	}
-	if (!isSorted(cp, SIZE, true)) {
-	cout << "ARRAY NOT SORTED" << endl;
-	}
-	if (!isSorted(cp2, SIZE, true)) {
-	cout << "ARRAY NOT SORTED" << endl;
-	}
-	if (!isSorted(cp3, SIZE, true)) {
-	cout << "ARRAY NOT SORTED" << endl;
-	}
-
-	//printArray(tab, SIZE);
-	//printArray(cp, SIZE);
-	//printArray(cp2, SIZE);
-	//printArray(cp3, SIZE);
-
-	int cs;
-	std::cin >> cs;
-	
-	return 2137;
-	*/
 }

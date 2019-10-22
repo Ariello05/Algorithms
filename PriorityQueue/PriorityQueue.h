@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <iostream>
 
+template <class T>
 class PQData 
 {
 public:
@@ -12,7 +13,7 @@ public:
 	}
 
 	unsigned int priority;
-	int value;
+	T value;
 };
 
 

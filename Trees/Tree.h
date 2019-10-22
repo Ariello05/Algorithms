@@ -2,6 +2,10 @@
 #include <string>
 #include <fstream>
 #include <istream>
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 template <typename T>
 class Tree {
@@ -109,8 +113,7 @@ public:
 	}
 	virtual void bfs() = 0;
 	void printInfo() {
-		using std::cout;
-		using std::endl;
+
 		cout << "Operations counters: \n"
 			<< "\tinsert: " << insertCount << endl
 			<< "\tdelete: " << deleteCount << endl
