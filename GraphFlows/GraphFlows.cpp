@@ -202,7 +202,7 @@ int runNormal(int k)
 
 	t = new HyperCube(k);
 	EdmondsKarp ek(t);
-
+	
 	std::cout << "max = " << ek.run() << std::endl;
 	auto end = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
