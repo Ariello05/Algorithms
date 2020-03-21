@@ -14,10 +14,10 @@ private:
 
 	virtual counter_s runSort(T tab[], int size);
 
-	bool compare(T tab[], int j, int i);
+	bool compare(T tab[], int j, T i);
 
-	bool isCheckASC(T tab[], int j, int i);
-	bool isCheckDESC(T tab[], int j, int i);
+	bool isCheckASC(T tab[], int j, T i);
+	bool isCheckDESC(T tab[], int j, T i);
 
 };
 
@@ -79,7 +79,7 @@ inline void InsertionSort<T>::partial_sort(T tab[], int p, int q, counter_s & co
 }
 
 template<typename T>
-inline bool InsertionSort<T>::compare(T tab[], int j, int elem)
+inline bool InsertionSort<T>::compare(T tab[], int j, T elem)
 {
 	if (this->asc) {
 		return isCheckASC(tab,j, elem);
@@ -91,7 +91,7 @@ inline bool InsertionSort<T>::compare(T tab[], int j, int elem)
 
 
 template<typename T>
-inline bool InsertionSort<T>::isCheckASC(T tab[], int j, int elem)
+inline bool InsertionSort<T>::isCheckASC(T tab[], int j, T elem)
 {
 	if (this->log) { cerr << Help::COMPARE<<"Index: [" << j << "]= " << tab[j] << "\t WITH \t value="<< elem << endl; }
 
@@ -99,7 +99,7 @@ inline bool InsertionSort<T>::isCheckASC(T tab[], int j, int elem)
 }
 
 template<typename T>
-inline bool InsertionSort<T>::isCheckDESC(T tab[], int j, int elem)
+inline bool InsertionSort<T>::isCheckDESC(T tab[], int j, T elem)
 {
 	if (this->log) { cerr << Help::COMPARE<<"Index: [" << j << "]= " << tab[j] << "\t WITH \t value=" << elem << endl; }
 

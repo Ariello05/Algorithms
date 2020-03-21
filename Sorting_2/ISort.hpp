@@ -1,6 +1,9 @@
 #pragma once
 #include "Helper.hpp"
 
+/**
+	Interfejs...
+*/
 template <typename T>
 class ISort
 {

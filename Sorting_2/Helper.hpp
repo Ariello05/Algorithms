@@ -1,10 +1,17 @@
 #pragma once
 #include <string>
+/**
+	Plik z funkcjami pomocniczymi
+*/
 typedef struct counter_t {
-	int checks;
-	int swaps;
+	long long checks;
+	long long swaps;
 
 }counter_s;
+
+using std::cout;
+using std::endl;
+using std::rand;
 
 namespace Help{
 
@@ -13,22 +20,86 @@ namespace Help{
 	const std::string COMPARE = " \033[1;32mCOMPARE\033[0m ";
 	const std::string PRINT = " \n\033[1;36mPRINT ARRAY!\033[0m ";
 
-	void swap(int tab[], int i1, int i2);
-	template<class T>
-	void swap(T tab, int i1, int i2);
-	void printArray(int tab[], int size);
-	void printArray(int tab[], int a, int b);
-	void copyArray(int source[], int dest[], int size);
-	int* copyArray(int source[], int size);
-	int* copyArray(int source[], int a, int b);
+	//void swap(int tab[], int i1, int i2);
+	//template<class T>
+	//void swap(T tab, int i1, int i2);
+
+	template <typename T>
+	void copyArray(T source[], T dest[], int size) {
+		for (int i = 0; i < size; ++i) {
+			dest[i] = source[i];
+		}
+	}
+
+	template <typename T>
+	T* copyArray(T source[], int size) {
+		T* tab = new T[size];
+
+		for (int i = 0; i < size; ++i) {
+			tab[i] = source[i];
+		}
+
+		return tab;
+	}
+
+	template <typename T>
+	T* copyArray(T source[], int a, int b) {
+		int size = (b - a) + 1;
+		T* tab = new T[size];
+
+		for (int i = 0; i < size; ++i) {
+			tab[i] = source[a + i];
+		}
+
+		return tab;
+	}
+
 	void generate(int tab[], int size, int min, int max);
-	bool isSorted(int tab[], int size, bool asc);
+
+	template <typename T>
+	bool isSorted(T tab[], int size, bool asc) {
+		if (asc) {
+			for (int i = 0; i < size - 1; ++i) {
+				if (tab[i + 1] < tab[i]) {
+					return false;
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < size - 1; ++i) {
+				if (tab[i + 1] > tab[i]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	bool contains(char*, std::string);
+	bool contains(std::string, std::string);
+
+	template <typename T>
+	void printArray(T tab[], int size) {
+		cout << Help::PRINT << "\n";
+		for (int i = 0; i < size; ++i) {
+			cout << "I: " << i << "\t Value: " << tab[i] << endl;
+		}
+		cout << "-----------------\n";
+	}
+
+	template <typename T>
+	void printArray(T tab[], int a, int b) {
+		cout << Help::PRINT << "\n";
+		for (int i = a; i <= b; ++i) {
+			cout << "I: " << i << "\t Value: " << tab[i] << endl;
+		}
+		cout << "-----------------\n";
+	}
 
 	template<class T>
-	inline void swap(T tab, int i1, int i2)
+	inline void swap(T tab[], int i1, int i2)
 	{
-		int buf = tab[i1];
+		T buf = tab[i1];
 		tab[i1] = tab[i2];
 		tab[i2] = buf;
 	}

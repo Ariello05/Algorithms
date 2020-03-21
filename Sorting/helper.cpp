@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <string>
 #include "helper.h"
 using std::cout;
 using std::endl;
@@ -65,4 +66,8 @@ bool isSorted(int tab[], int size, bool asc) {
 bool contains(char * str, std::string str2) {
 	std::string conv = str;
 	return conv.find(str2) != std::string::npos;
+}
+
+bool contains(std::string str, std::string str2) {
+	return str.find(str2) != std::string::npos;
 }

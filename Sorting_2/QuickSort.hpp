@@ -15,11 +15,11 @@ private:
 	virtual counter_s runSort(T tab[], int size);
 	int partition(T tab[], int begin, int end, counter_s& counter);
 
-	bool compare(T tab[], int j, int x);
+	bool compare(T tab[], int j, T x);
 	void quickSort(T tab[], int p, int r, counter_s& checks);
 
-	bool qsCheckASC(T tab[], int j, int x);
-	bool qsCheckDESC(T tab[], int j, int x);
+	bool qsCheckASC(T tab[], int j, T x);
+	bool qsCheckDESC(T tab[], int j, T x);
 
 };
 
@@ -43,7 +43,7 @@ inline counter_s QuickSort<T>::runSort(T tab[], int size)
 
 template<typename T>
 inline int QuickSort<T>::partition(T tab[], int begin, int end, counter_s& counter) {
-	int x = tab[end];
+	T x = tab[end];
 	int i = begin - 1;
 	for (int j = begin; j <= end - 1; ++j) {
 		counter.checks++;
@@ -62,7 +62,7 @@ inline int QuickSort<T>::partition(T tab[], int begin, int end, counter_s& count
 }
 
 template<typename T>
-inline bool QuickSort<T>::compare(T tab[], int j, int x)
+inline bool QuickSort<T>::compare(T tab[], int j, T x)
 {
 	if (this->asc) {
 		return qsCheckASC(tab, j, x);
@@ -84,13 +84,13 @@ inline void QuickSort<T>::quickSort(T tab[], int begin, int end, counter_s& chec
 }
 
 template<typename T>
-inline bool QuickSort<T>::qsCheckASC(T tab[], int j, int x)
+inline bool QuickSort<T>::qsCheckASC(T tab[], int j, T x)
 {
 	return (tab[j] <= x);
 }
 
 template<typename T>
-inline bool QuickSort<T>::qsCheckDESC(T tab[], int j, int x)
+inline bool QuickSort<T>::qsCheckDESC(T tab[], int j, T x)
 {
 	return (tab[j] >= x);
 }

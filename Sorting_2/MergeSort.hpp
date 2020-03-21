@@ -57,7 +57,7 @@ inline void MergeSort<T>::merge(T tab[], int begin, int end, counter_s& counter)
 
 		int i = 0;
 		int j = mid + 1;
-		int* copy = Help::copyArray(tab, begin, mid);
+		T* copy = Help::copyArray(tab, begin, mid);
 		for (int k = begin; k <= end; k++) {
 
 			counter.checks++;

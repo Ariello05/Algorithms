@@ -9,6 +9,9 @@ using std::endl;
 
 class Pivots {
 public:
+	Pivots() {
+
+	}
 	Pivots(int pos_p, int pos_q) {
 		this->pos_p = pos_p;
 		this->pos_q = pos_q;
@@ -25,7 +28,7 @@ public:
 private:
 
 	virtual counter_s runSort(T tab[], int size);
-	Pivots partition(T tab[], int p, int q, int begin, int end, counter_s& counter);
+	Pivots partition(T tab[], T p, T q, int begin, int end, counter_s& counter);
 
 	void rotate3(T tab[], int a, int b, int c);
 	bool compare(T tab[], int j, int x);
@@ -61,7 +64,7 @@ inline counter_s CountQuickSort<T>::runSort(T tab[], int size)
 }
 
 template<typename T>
-inline Pivots CountQuickSort<T>::partition(T tab[], int p, int q, int begin, int end, counter_s& counter)
+inline Pivots CountQuickSort<T>::partition(T tab[], T p, T q, int begin, int end, counter_s& counter)
 {
 	int i = begin + 1;
 	int k = end - 1;
@@ -69,8 +72,8 @@ inline Pivots CountQuickSort<T>::partition(T tab[], int p, int q, int begin, int
 	int d = 0;// holds the difference of the number of small and large elements.
 
 	while (j <= k){
-		counter.checks++;
-		if (this->log) { cerr << Help::COMPARE << "\td:" << d << "\t > \t" << 0 << endl; }
+		//counter.checks++;
+		//if (this->log) { cerr << Help::COMPARE << "\td:" << d << "\t > \t" << 0 << endl; }
 		if (d > 0) {
 			counter.checks++;
 			if (this->log) { cerr << Help::COMPARE << "tab[" << j  << "]:" << tab[j] << "\t < \t" << "p:" << p << endl; }
@@ -106,8 +109,6 @@ inline Pivots CountQuickSort<T>::partition(T tab[], int p, int q, int begin, int
 				d--;
 				if (this->log) { cerr << Help::COMPARE << "tab[" << k << "]:" << tab[k] << "\t > \t" << "q:" << q << endl; }
 			}
-			counter.checks++;
-			if (this->log) { cerr << Help::COMPARE << "\tj:" << j << "\t <= \t" << "k:" << k << endl; }
 			if (j <= k) {
 				counter.checks++;
 
@@ -163,11 +164,12 @@ inline bool CountQuickSort<T>::compare(T tab[], int j, int x)
 template<typename T>
 inline void CountQuickSort<T>::quickSort(T tab[], int begin, int end, counter_s& checks)
 {
-	//if (end - begin <= 4) {
-	//	InsertionSort<T> sorter(this->asc, this->log);
-	//	sorter.partial_sort(tab, begin, end, checks);
-	//	return;
-	//}
+	//Implementacja hybrydowa
+	if (end - begin <= 8) {
+		InsertionSort<T> sorter(true, this->log);//true because we swap nodes if descending
+		sorter.partial_sort(tab, begin, end, checks);
+		return;
+	}
 
 	if (begin >= end) {
 		return;
@@ -180,16 +182,11 @@ inline void CountQuickSort<T>::quickSort(T tab[], int begin, int end, counter_s&
 		if (this->log) { cerr << Help::SWAP << "tab[" << begin << "]:" << tab[begin] << "\t WITH \t" << "tab[" << end << "]:" << tab[end] << endl; }
 		Help::swap(tab, begin, end);
 	}
-	auto p = tab[begin];
-	auto q = tab[end];
+	T p = tab[begin];
+	T q = tab[end];
 
-	//std::cout << "PRE PART\n";
-	//Help::printArray(tab, begin, end);
 	Pivots piv = partition(tab,p,q, begin, end, checks);
-	//std::cout << "POST PART\n";
-	//Help::printArray(tab, begin, end);
 
-	//std::cout << "(begin,end,p,q): " << begin << '\t' << end << '\t' << piv.pos_p << '\t' << piv.pos_q << std::endl;
 
 	quickSort(tab, begin, piv.pos_p-1, checks);
 	quickSort(tab, piv.pos_p + 1, piv.pos_q-1, checks);

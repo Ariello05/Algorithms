@@ -6,102 +6,134 @@
 #include <stdio.h>
 #include <fstream>
 #include <vector>
+#include <string>
 
 #include "InsertionSort.hpp"
 #include "MergeSort.hpp"
 #include "QuickSort.hpp"
 #include "CountQuickSort.hpp"
-#include "HybridSort.hpp"
 
+using std::string;
 using std::cout;
 using std::endl;
 using std::rand;
 using std::cerr;
 using std::cin;
 
+template<typename T>
+void runTask_1(int n, char* agrv[], bool asc) {
+	cout << "Type list: ";
+	T* tab = new T[n];
+	for (int i = 0; i < n; ++i) {
+		cin >> tab[i];
+	}
+
+	counter_s licznik;
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();//c++11
+	ISort<T>* sorter;
+	if (Help::contains(agrv[2], "insert")) {
+		sorter = new InsertionSort<T>(asc, true);
+		licznik = sorter->sort(tab, n, asc);
+	}
+	else if (Help::contains(agrv[2], "merge")) {
+		sorter = new MergeSort<T>(asc, true);
+		licznik = sorter->sort(tab, n, asc);
+	}
+	else if (Help::contains(agrv[2], "quick")) {
+		sorter = new QuickSort<T>(asc, true);
+		licznik = sorter->sort(tab, n, asc);
+	}
+	else if (Help::contains(agrv[2], "count")) {
+		sorter = new CountQuickSort<T>(asc, true);
+		licznik = sorter->sort(tab, n, asc);
+	}
+	else {
+		cerr << "Unkown second argument namely: " << agrv[3] << "\t suspected insert|heap|quick|count" << endl;
+		return ;
+	}
+	delete sorter;
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+	int elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+
+	cout << "\n Compares:" << licznik.checks << "\tSwaps:" << licznik.swaps << "\tElapsed Time(ms):" << elapsed << endl;
+	//Help::printArray(tab, n);
+	if (!Help::isSorted(tab, n, asc)) {
+		cout << "ARRAY NOT SORTED" << endl;
+		return ;
+	}
+	Help::printArray(tab, n);
+}
+
 int main(int argc, char* agrv[]) {
-	if (argc <= 2) {
-		cerr << "(--type insert|merge|quick|count|hybrid --asc|--desc) | (--stat nazwapliku)";
+	if (argc <= 3) {
+		cerr << "(--type insert|merge|quick|count --comp '>='|'<=') | (--stat nazwapliku k)";
+		system("pause");
 		return 0;
 	}
 
 	if (Help::contains(agrv[1], "--type")) {
-		if (argc <= 3) {
-			cerr << "Not enough param need --asc|--desc";
+		if (argc <= 4) {
+			cerr << "Not enough param need --comp '>='|'<='";
+			system("pause");
 			return 0;
 		}
 		bool asc;
-		if (Help::contains(agrv[3], "--asc")) {
+		if (!Help::contains(agrv[3], "--comp")) {
+			cerr << "Expected --comp...\n";
+			system("pause");
+			return 0;
+		}
+
+		string str = agrv[4];
+
+		if (Help::contains(str, "<=")) {
 			asc = true;
 		}
-		else if (Help::contains(agrv[3], "--desc")) {
+		else if (Help::contains(str, ">=")) {
 			asc = false;
 		}
 		else {
-			cerr << "Unkown third argument namely: " << agrv[3] << "\t suspected --asc|--desc" << endl;
+			cerr << "Unkown fourth argument namely: " << str << "\t suspected '>='|'<='" << endl;
+			system("pause");
 			return 0;
 		}
 
 		int n;
-		cout << "Type size: ";
+		cout << "Type list size: ";
 		cin >> n;
-		cout << "Type list: ";
-		int* tab = new int[n];
-		for (int i = 0; i < n; ++i) {
-			cin >> tab[i];
-		}
 
-		counter_s licznik;
-		std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();//c++11
-		ISort<int>* sorter;
-		if (Help::contains(agrv[2], "insert")){
-			sorter = new InsertionSort<int>(asc,true);
-			licznik = sorter->sort(tab, n, asc);
+		cout << "Select list type: int|double|string: ";
+		string type;
+		cin >> type;
+
+		if (Help::contains(type, "double")) {
+			runTask_1<double>(n,agrv,asc);
 		}
-		else if (Help::contains(agrv[2], "merge")) {
-			sorter = new MergeSort<int>(asc, true);
-			licznik = sorter->sort(tab, n, asc);
+		else if (Help::contains(type, "int")) {
+			runTask_1<int>(n, agrv, asc);
 		}
-		else if (Help::contains(agrv[2], "quick")) {
-			sorter = new QuickSort<int>(asc, true);
-			licznik = sorter->sort(tab, n, asc);
-		}
-		else if (Help::contains(agrv[2], "count")) {
-			sorter = new CountQuickSort<int>(asc, true);
-			licznik = sorter->sort(tab, n, asc);
-		}
-		else if (Help::contains(agrv[2], "hybrid")) {
-			sorter = new HybridSort<int>(asc, true);
-			licznik = sorter->sort(tab, n, asc);
+		else if (Help::contains(type, "string")) {
+			runTask_1<string>(n, agrv, asc);
 		}
 		else {
-			cerr << "Unkown second argument namely: " << agrv[3] << "\t suspected insert|heap|quick|count|hybrid" << endl;
-			return 0;
+			cout << "Deducted int ... \n";
+			runTask_1<int>(n, agrv, asc);
 		}
-		delete sorter;
-		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-		int elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
 
-		cout << "Compares:" << licznik.checks << "\tSwaps:" << licznik.swaps << "\tElapsed Time(ms):" << elapsed << endl;
-		//Help::printArray(tab, n);
-		if (!Help::isSorted(tab, n, asc)) {
-			cout << "ARRAY NOT SORTED" << endl;
-			return 0;
-		}
-		Help::printArray(tab, n);
-
-		cin >> n;
+		system("pause");
 
 	}
 	else if (Help::contains(agrv[1], "--stat")) {
 		if (argc <= 3) {
 			cerr << "Not enough param need: nazwapliku k";
+			system("pause");
 			return 0;
 		}
 		std::string filename = agrv[2];
 		std::ofstream file(filename);
 		if (file.bad()) {
 			cerr << "Unkown file error!";
+			system("pause");
 			return 0;
 		}
 		int k;
@@ -110,10 +142,11 @@ int main(int argc, char* agrv[]) {
 		}
 		catch (std::invalid_argument) {
 			cerr << "Unkown third argument namely: " << agrv[3] << "\tsuspected integer" << endl;
+			system("pause");
 			return 0;
 		}
 
-		const int algsSize = 5;
+		const int algsSize = 4;
 
 		int* tab[algsSize];//data
 
@@ -123,7 +156,7 @@ int main(int argc, char* agrv[]) {
 		double timesAVG[algsSize];
 		clock_t begin;
 		clock_t end;
-		file << "N [I]Compares Swaps Time [M]Compares Swaps Time [Q]Compares Swaps Time [C]Compares Swaps Time [H]Compares Swwaps Time\n";
+		file << "N [I]Compares Swaps Time [M]Compares Swaps Time [Q]Compares Swaps Time [C]Compares Swaps Time\n";
 		//std::chrono::steady_clock::time_point begin;//timer
 		//std::chrono::steady_clock::time_point end;
 		srand(time(0));
@@ -139,8 +172,6 @@ int main(int argc, char* agrv[]) {
 			MergeSort<int> mergeSorter(true, false);
 			QuickSort<int> quickSorter(true, false);
 			CountQuickSort<int> quickCountSorter(true, false);
-			HybridSort<int> hybridSorter(true, false);
-
 			for (int i = 0; i < k; ++i) {
 				Help::generate(tab[0], n, 0, 10000);
 				for (int i = 1; i < algsSize; ++i) {
@@ -167,12 +198,8 @@ int main(int argc, char* agrv[]) {
 				end = clock();
 				times[3] = double(end - begin) / CLOCKS_PER_SEC;
 
-				begin = clock();
-				counters[4] = hybridSorter.sort(tab[4], n, true);
-				end = clock();
-				times[4] = double(end - begin) / CLOCKS_PER_SEC;
-
 				for (int i = 0; i < algsSize; ++i) {//add to average
+					if (i == 0) continue;
 					timesAVG[i] += times[i];
 					countersAVG[i].checks += counters[i].checks;
 					countersAVG[i].swaps += counters[i].swaps;
@@ -181,9 +208,10 @@ int main(int argc, char* agrv[]) {
 			}
 
 			for (int i = 0; i < algsSize; ++i) {
+				if (i == 0) continue;
 				timesAVG[i] = timesAVG[i] / k;//arithmetic average
-				countersAVG[i].checks += counters[i].checks / k;
-				countersAVG[i].swaps += counters[i].swaps / k;
+				countersAVG[i].checks = countersAVG[i].checks / k;
+				countersAVG[i].swaps = countersAVG[i].swaps / k;
 				delete[] tab[i];
 			}
 
@@ -191,6 +219,7 @@ int main(int argc, char* agrv[]) {
 
 			file << n << " ";
 			for (int i = 0; i < algsSize; ++i) {
+				if (i == 0) continue;
 				file << countersAVG[i].checks << " " << countersAVG[i].swaps << " " << timesAVG[i] << " ";
 			}
 			file << '\n';
@@ -200,6 +229,7 @@ int main(int argc, char* agrv[]) {
 	}
 	else {
 		cerr << "Unkown first argument namely: " << agrv[1] << "\tsuspected --type | --stat" << endl;
+		system("pause");
 		return 0;
 	}
 
