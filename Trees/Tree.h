@@ -6,6 +6,7 @@
 
 using std::cout;
 using std::endl;
+using std::cerr;
 
 template <typename T>
 class Tree {
@@ -13,8 +14,8 @@ public:
 	virtual void insert(T) {
 		insertCount++;
 		size++;
-		if (max < size) {
-			max = size;
+		if (max_size < size) {
+			max_size = size;
 		}
 	}
 	virtual void remove(T) {
@@ -29,7 +30,7 @@ public:
 		loadCount++;
 		std::ifstream file(f);
 		if (!file.is_open()) {
-			std::cerr << "Can't find file!\n";
+			throw std::runtime_error("Can't find file!\n");
 			file.close();
 			return;
 		}
@@ -56,7 +57,7 @@ public:
 		//loadCount++;
 		std::ifstream file(f);
 		if (!file.is_open()) {
-			std::cerr << "Can't find file!\n";
+			throw std::runtime_error("Can't find file!\n");
 			file.close();
 			return;
 		}
@@ -108,19 +109,35 @@ public:
 		}
 		file.close();
 	}
-	virtual void inOrder() {
+	virtual std::string inOrder() {
 		inOrderCount++;
+		return "";
 	}
 	virtual void bfs() = 0;
+	virtual std::string min(){
+		minCount++;
+		return "";
+	};
+	virtual std::string max() {
+		maxCount++;
+		return "";
+	};
+	virtual std::string successor(T f) {
+		successorCount++;
+		return "";
+	};
 	void printInfo() {
 
-		cout << "Operations counters: \n"
+		std::cerr << "Operations counters: \n"
 			<< "\tinsert: " << insertCount << endl
 			<< "\tdelete: " << deleteCount << endl
 			<< "\tsearch: " << searchCount << endl
 			<< "\tload: " << loadCount << endl
-			<< "\tinOrder: " << inOrderCount << endl << endl
-			<< "Maximum size: " << max << endl
+			<< "\tinOrder: " << inOrderCount << endl
+			<< "\tmin: " << minCount << endl
+			<< "\tmax: " << maxCount << endl
+			<< "\tsuccessor: " << successorCount << endl << endl
+			<< "Maximum size: " << max_size << endl
 			<< "Ending size: " << size << endl
 			<< "Node checks: " << checks << endl
 			<< "Node swaps: " << swaps << endl;
@@ -142,9 +159,12 @@ protected:
 	int searchCount = 0;
 	int loadCount = 0;
 	int inOrderCount = 0;
+	int maxCount = 0;
+	int minCount = 0;
+	int successorCount = 0;
 
 	int swaps = 0;
 	int checks = 0;
-	int max = 0;
+	int max_size = 0;
 	int size = 0;
 };

@@ -140,17 +140,19 @@ bool RB<T>::search(T str)
 }
 
 template<typename T>
-void RB<T>::inOrder()
+std::string RB<T>::inOrder()
 {
 	Tree<T>::inOrder();
 
-	printf("=inOrder= \n");
+	//printf("=inOrder= \n");
 	Tree<T>::checks++;
 	if (top == nullptr) {
-		std::cout << "Empty...\n";
-		return;
+		//std::cout << "Empty...\n";
+		return "";
 	}
-	print(top);
+	std::string buffor = "";
+	print(top, buffor);
+	return(buffor);
 }
 
 template<typename T>
@@ -369,6 +371,58 @@ void RB<T>::transplant(node<T> x, node<T> y)
 }
 
 template<typename T>
+std::string RB<T>::min()
+{
+	Tree<T>::min();
+	if (top == nullptr) {
+		return "";
+	}
+
+	return std::string(this->min(top)->getValue());
+}
+
+template<typename T>
+std::string RB<T>::max()
+{
+	Tree<T>::max();
+	if (top == nullptr) {
+		return "";
+	}
+	auto current = top;
+	while (current->getRightNode() != nullptr) {
+		Tree<T>::checks++;
+		current = current->getRightNode();
+	}
+
+	return std::string(current->getValue());
+}
+
+template<typename T>
+std::string RB<T>::successor(T f)
+{
+	Tree<T>::successor(f);
+	auto key = this->get(f);
+	if (key == nullptr) {
+		return "";
+	}
+	else {
+		auto parent = key->getParent();
+		if (parent == nullptr) {
+			return "";
+		}
+		else {
+			return parent->getValue();
+		}
+	}
+}
+
+template<typename T>
+int RB<T>::getSize()
+{
+	return this->size;
+}
+
+template<typename T>
 node<T> RB<T>::min(node<T> current)
 {
 	while (!current->getLeftNode()->isSentinel()) {
@@ -446,13 +500,14 @@ void RB<T>::rightRotate(node<T> y)				//	   y		   x
 }
 
 template<typename T>
-void RB<T>::print(node<T> n)//dfs
+void RB<T>::print(node<T> n, std::string& buffor)//dfs
 {
 	if (!n->isSentinel()) {
 		//Tree<T>::checks++;
-		print(n->getLeftNode());
-		std::cout << n->getValue() << std::endl;
-		print(n->getRightNode());
+		print(n->getLeftNode(),buffor);
+		buffor += n->getValue() + " ";
+		//std::cout << n->getValue() << std::endl;
+		print(n->getRightNode(), buffor);
 	}
 }
 

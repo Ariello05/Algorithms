@@ -12,14 +12,14 @@ public:
 	virtual void insert(T val);
 	virtual void remove(T val);
 	virtual bool search(T val);
-	virtual void inOrder();
+	virtual std::string inOrder();
 	virtual void bfs();
 private:
 
 	SplayNode<T>* splay(SplayNode<T>* root, T x);
 	void leftRotate(SplayNode<T>* n);
 	void rightRotate(SplayNode<T>* n);
-	void print(SplayNode<T>* n);
+	void print(SplayNode<T>* n, std::string & buffor);
 	SplayNode<T>* top;
 
 };

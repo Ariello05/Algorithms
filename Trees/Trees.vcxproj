@@ -23,7 +23,7 @@
     <ProjectGuid>{A67429CC-92F5-4ACE-A416-9DB285FBDC56}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Trees</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -170,11 +170,17 @@
   <ItemGroup>
     <ClInclude Include="BST.h" />
     <ClInclude Include="BSTNode.h" />
+    <ClInclude Include="HashMap.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="RB.h" />
     <ClInclude Include="RBNode.h" />
     <ClInclude Include="Splay.h" />
     <ClInclude Include="Tree.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="aspell_wordlist.txt" />
+    <Text Include="KJB.txt" />
+    <Text Include="lotr.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

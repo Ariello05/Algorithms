@@ -15,11 +15,15 @@ public:
 	virtual void insert(T) override;
 	virtual void remove(T) override;
 	virtual bool search(T) override;
-	virtual void inOrder() override;
-	virtual void bfs();
+	virtual std::string inOrder() override;
+	virtual void bfs() override;
+	virtual std::string min() override;
+	virtual std::string max() override;
+	virtual std::string successor(T f) override;
 private:
+	stringNode<T> min(stringNode<T> current);
 	stringNode<T> min(stringNode<T> current, stringNode<T>& prev);
-	void print(stringNode<T> n);
+	void print(stringNode<T> n, std::string& buffor);
 	stringNode<T> top;
 };
 

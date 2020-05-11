@@ -175,17 +175,19 @@ bool BST<T>::search(T str)
 }
 
 template <typename T>
-void BST<T>::inOrder()
+std::string BST<T>::inOrder()
 {
 	Tree<T>::inOrder();
 
-	printf("=inOrder= \n");
+	//printf("=inOrder= \n");
 	Tree<T>::checks++;
 	if (top == nullptr) {
-		std::cout << "Empty...\n";
-		return;
+		//std::cout << "Empty...\n";
+		return "";
 	}
-	print(top);
+	std::string buffor = "";
+	print(top, buffor);
+	return(buffor);
 }
 
 template <typename T>
@@ -221,6 +223,74 @@ void BST<T>::bfs()
 
 }
 
+template<typename T>
+std::string BST<T>::min()
+{
+	Tree<T>::min();
+	if (top == nullptr) {
+		return "";
+	}
+
+	return std::string(this->min(top)->getValue());
+}
+
+template<typename T>
+std::string BST<T>::max()
+{
+	Tree<T>::max();
+	if (top == nullptr) {
+		return "";
+	}
+	auto current = top;
+	while (current->getRightNode() != nullptr) {
+		Tree<T>::checks++;
+		current = current->getRightNode();
+	}
+
+	return std::string(current->getValue());
+}
+
+template<typename T>
+std::string BST<T>::successor(T f)
+{
+	Tree<T>::successor(f);
+	stringNode<T> iter = top;
+	if (top == nullptr) {
+		return "";
+	}
+	else if (*top == f) {
+		return "";
+	}
+
+	auto prev = top;
+	while (iter != nullptr) {
+		Tree<T>::checks += 2;
+		if (*iter == f) {
+			return prev->getValue();
+		}
+		Tree<T>::checks++;
+		prev = iter;
+		if (*iter > f) {
+			iter = iter->getLeftNode();
+		}
+		else {
+			iter = iter->getRightNode();
+		}
+		
+	}
+	return "";
+}
+
+template <typename T>
+stringNode<T> BST<T>::min(stringNode<T> current)
+{
+	while (current->getLeftNode() != nullptr) {
+		Tree<T>::checks++;
+		current = current->getLeftNode();
+	}
+	return current;
+}
+
 template <typename T>
 stringNode<T> BST<T>::min(stringNode<T> current, stringNode<T>& prev)
 {
@@ -233,13 +303,30 @@ stringNode<T> BST<T>::min(stringNode<T> current, stringNode<T>& prev)
 }
 
 template <typename T>
-void BST<T>::print(stringNode<T> n)//dfs
+void BST<T>::print(stringNode<T> n, std::string & buffor)//dfs
 {
 	if (n != nullptr) {
 		//Tree<T>::checks++;
-		print(n->getLeftNode());
-		std::cout << n->getValue() << std::endl;
-		print(n->getRightNode());
+		print(n->getLeftNode(), buffor);
+		buffor += n->getValue() + " ";
+		//std::cout << n->getValue() << std::endl;
+		print(n->getRightNode(), buffor);
 	}
 }
 
+/*
+void test(int * a, int n, int *x, int *y){
+	double x_sum = 0;
+	double y_sum = 0;
+	double xy_sum = 0;
+	double x_sq_sum = 0;
+
+	for (int i = 0; i < n; ++i) {
+		x_sum += x[i];
+		y_sum += y[i];
+		xy_sum += x[i] * y[i];
+		x_sq_sum += pow(x[i], 2);
+	}
+
+	*a = (n * xy_sum - x_sum * y_sum) /( n * x_sq_sum - pow(x_sum, 2));
+}*/

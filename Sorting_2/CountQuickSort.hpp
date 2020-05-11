@@ -59,6 +59,15 @@ inline counter_s CountQuickSort<T>::runSort(T tab[], int size)
 			Help::swap(tab, i, (size-1) - i);
 		}
 	}
+	#ifdef _WIN32
+		PROCESS_MEMORY_COUNTERS_EX pmc;
+		GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)& pmc, sizeof(pmc));
+		SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
+		SIZE_T physMemUsedByMe = pmc.WorkingSetSize;
+		counter.memory = physMemUsedByMe;
+		//_tprintf(TEXT("There is  %*ld %% of memory in use.\n"),
+		//	7, physMemUsedByMe);
+	#endif
 
 	return counter;
 }

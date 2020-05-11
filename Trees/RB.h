@@ -15,8 +15,13 @@ public:
 	virtual void insert(T) override;
 	virtual void remove(T) override;
 	virtual bool search(T) override;
-	virtual void inOrder() override;
-	virtual void bfs();
+	virtual std::string inOrder() override;
+	virtual void bfs() override;
+	virtual std::string min() override;
+	virtual std::string max() override;
+	virtual std::string successor(T f) override;
+	int getSize();
+
 private:
 
 	node<T> get(T);
@@ -27,8 +32,9 @@ private:
 	void leftRotate(node<T> n);
 	void rightRotate(node<T> n);
 
-	void print(node<T> n);
+	void print(node<T> n, std::string& buffor);
 	node<T> top;
+
 };
 
 

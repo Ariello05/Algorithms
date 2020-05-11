@@ -53,5 +53,19 @@
     <ClInclude Include="Splay.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="HashMap.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="aspell_wordlist.txt">
+      <Filter>Pliki zasobów</Filter>
+    </Text>
+    <Text Include="KJB.txt">
+      <Filter>Pliki zasobów</Filter>
+    </Text>
+    <Text Include="lotr.txt">
+      <Filter>Pliki zasobów</Filter>
+    </Text>
   </ItemGroup>
 </Project>

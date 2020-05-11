@@ -1,13 +1,20 @@
 #pragma once
 #include <string>
+#include <iostream>
 /**
 	Plik z funkcjami pomocniczymi
 */
 typedef struct counter_t {
 	long long checks;
 	long long swaps;
-
+	size_t memory;
 }counter_s;
+
+typedef struct select_t {
+	long long checks;
+	long long swaps;
+	long long value;
+}select_s;
 
 using std::cout;
 using std::endl;
@@ -83,6 +90,20 @@ namespace Help{
 		cout << Help::PRINT << "\n";
 		for (int i = 0; i < size; ++i) {
 			cout << "I: " << i << "\t Value: " << tab[i] << endl;
+		}
+		cout << "-----------------\n";
+	}
+
+	template <typename T>
+	void printStatisticArray(T tab[], int size, int statistic) {
+		cout << Help::PRINT << "\n";
+		for (int i = 0; i < size; ++i) {
+			if (i == statistic) {
+				cout << "STATISTIC: " << i << "\t Value: [" << tab[i] << "]" << endl;
+			}
+			else {
+				cout << "I: " << i << "\t Value: " << tab[i] << endl;
+			}
 		}
 		cout << "-----------------\n";
 	}

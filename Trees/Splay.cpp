@@ -117,17 +117,19 @@ bool Splay<T>::search(T val)
 }
 
 template<typename T>
-void Splay<T>::inOrder()
+std::string Splay<T>::inOrder()
 {
 	Tree<T>::inOrder();
 
-	printf("=inOrder= \n");
+	//printf("=inOrder= \n");
 	Tree<T>::checks++;
 	if (top == nullptr) {
-		std::cout << "Empty...\n";
-		return;
+		//std::cout << "Empty...\n";
+		return "\n";
 	}
-	print(top);
+	std::string buffor = "";
+	print(top, buffor);
+	return(buffor);
 }
 
 template<typename T>
@@ -275,13 +277,14 @@ void Splay<T>::rightRotate(SplayNode<T>* y)				//	   y		   x
 }
 
 template<typename T>
-void Splay<T>::print(SplayNode<T>* n)//dfs
+void Splay<T>::print(SplayNode<T>* n, std::string& buffor)//dfs
 {
 	if (n!=nullptr) {
 		//Tree<T>::checks++;
-		print(n->getLeftNode());
-		std::cout << n->getValue() << std::endl;
-		print(n->getRightNode());
+		print(n->getLeftNode(),buffor);
+		buffor += n->getValue() + " ";
+		//std::cout << n->getValue() << std::endl;
+		print(n->getRightNode(), buffor);
 	}
 }
 

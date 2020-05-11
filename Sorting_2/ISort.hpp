@@ -1,6 +1,11 @@
 #pragma once
 #include "Helper.hpp"
-
+#ifdef _WIN32
+#include <windows.h>
+#include <stdio.h>
+#include <tchar.h>
+#include "psapi.h"
+#endif
 /**
 	Interfejs...
 */

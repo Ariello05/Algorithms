@@ -40,6 +40,15 @@ inline counter_s MergeSort<T>::runSort(T tab[], int size)
 		return counter;
 	}
 	merge(tab,0,size-1, counter);
+	#ifdef _WIN32
+		PROCESS_MEMORY_COUNTERS_EX pmc;
+		GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)& pmc, sizeof(pmc));
+		SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
+		SIZE_T physMemUsedByMe = pmc.WorkingSetSize;
+		counter.memory = physMemUsedByMe;
+		//_tprintf(TEXT("There is  %*ld %% of memory in use.\n"),
+		//	7, physMemUsedByMe);
+	#endif
 
 	return counter;
 }
