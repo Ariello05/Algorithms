@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\PriorityQueue\PriorityQueue.cpp" />
     <ClCompile Include="Dijkstra.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="Kruskal.cpp" />
@@ -26,18 +27,24 @@
     <ClCompile Include="Prim.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\PriorityQueue\PriorityQueue.h" />
     <ClInclude Include="Dijkstra.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="Kruskal.h" />
     <ClInclude Include="Prim.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PriorityQueue\PriorityQueue.vcxproj">
+      <Project>{694155af-78e2-4d43-9f10-bc08397281f3}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{D50C61D9-E629-47C5-8984-37CD8C808D25}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Graphs</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

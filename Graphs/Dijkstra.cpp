@@ -47,13 +47,20 @@ void Dijkstra::Generate(const unsigned int startingPoint)
 	double end = clock();
 	double time = double(end - begin) / CLOCKS_PER_SEC;
 
+	std::cout << std::endl;
+	std::cout << "Vertex \t    Sum Weight\n";
+	for (int i = 1; i <= g.getVerticeSize(); ++i) {
+		std::cout << "  " << i << "\t\t" << distance[i] << std::endl;
+	}
+	std::cout << std::endl;
+
 	for (int i = 1; i <= g.getVerticeSize(); ++i) {
 		if (i != startingPoint) {
 			int prev = tab[i].first;
 			int cur = i;
 			std::cerr << "Routing: " << cur << std::endl;
 			while (cur != startingPoint) {
-				std::cerr << "  " << cur << "\t to \t";
+				std::cerr << "  " << cur << "\t from \t";
 				std::cerr << tab[cur].first << "\t weight: ";
 				std::cerr << tab[cur].second << '\n';
 				cur = prev;
@@ -61,14 +68,7 @@ void Dijkstra::Generate(const unsigned int startingPoint)
 			}
 		}
 	}
-
-
-	std::cout << "Vertex \t    Sum Weight\n";
-	for (int i = 1; i <= g.getVerticeSize(); ++i) {
-		std::cout << "  " << i << "\t\t" << distance[i] << std::endl;
-	}
-
-	std::cout << "CPU time elapsed: " << time << std::endl;
+	std::cerr << "CPU time elapsed: " << time << std::endl;
 
 }
 

@@ -90,20 +90,18 @@ void Define(Edge *& edg, int & E, int & V) {
 	cin >> V;
 	cout << "Type number of Edges: " << endl;
 	cin >> E;
-	cout << "Type m edges: [ ]" << endl;
+	cout << "Type m edges:" << endl;
 	Edge * edges = new Edge[E];
 	unsigned int buff;
+	cout << "Type u v w \n";
 	for (int i = 0; i < E; ++i) {
-		cout << "Type u:" << endl;
+		cout << "> ";
 		cin >> buff;
 		edges[i].v1 = buff;
-		cout << "Type v:" << endl;
 		cin >> buff;
 		edges[i].v2 = buff;
-		cout << "Type w:" << endl;
 		cin >> buff;
 		edges[i].weight = buff;
-		cout << "------NEW EDGE-------" << endl;
 	}
 	edg = edges;
 }
