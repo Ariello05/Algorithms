@@ -377,8 +377,11 @@ std::string RB<T>::min()
 	if (top == nullptr) {
 		return "";
 	}
+	if (top->isSentinel()) {
+		return "";
+	}
 
-	return std::string(this->min(top)->getValue());
+	return std::string(min(top)->getValue());
 }
 
 template<typename T>
@@ -389,7 +392,13 @@ std::string RB<T>::max()
 		return "";
 	}
 	auto current = top;
-	while (current->getRightNode() != nullptr) {
+	if (current->isSentinel()) {
+		return "";
+	}
+	
+	while (!current->getRightNode()->isSentinel()) {
+		std::cout << "XD" << std::endl;
+		std::cout << current->getValue() << std::endl;
 		Tree<T>::checks++;
 		current = current->getRightNode();
 	}
@@ -427,6 +436,7 @@ node<T> RB<T>::min(node<T> current)
 {
 	while (!current->getLeftNode()->isSentinel()) {
 		Tree<T>::checks++;
+		std::cout << current->getValue() << std::endl;
 		current = current->getLeftNode();
 	}
 	return current;

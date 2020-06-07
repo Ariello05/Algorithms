@@ -70,6 +70,7 @@ int main(int argc, char* argv[])
 	try {
 		if (argc < 3) {
 			throw std::runtime_error("--type bst|rb|hmap <./input> out.res");
+
 			return 0;
 		}
 		if (argc >= 3) {
@@ -172,6 +173,7 @@ void runProgram(structureType type) {
 	auto end = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
 	cerr << "Time elapsed(seconds): " << duration.count() << endl;
+	t->updateVariables();
 	t->printInfo();
 
 	delete t;
@@ -225,13 +227,17 @@ void runFromFile(structureType type, std::string inputPath, std::string outputPa
 			outputFile << t->inOrder() << "\n";
 		}
 		else if (str == "min") {
-			//TODO
+			outputFile << t->min() << "\n";
 		}
 		else if (str == "max") {
-			//TODO
+			outputFile << t->max() << "\n";
 		}
-		else if (str == "successor k") {
-			//TODO 
+		else if (str == "successor") {
+			inputFile >> str;
+			outputFile << t->successor(str) << "\n";
+		}
+		else if (str == "bfs") {
+			t->bfs();
 		}
 		else if (str == "exit") {
 			break;
@@ -244,6 +250,7 @@ void runFromFile(structureType type, std::string inputPath, std::string outputPa
 	auto end = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
 	cerr << "Time elapsed(seconds): " << duration.count() << endl;
+	t->updateVariables();
 	t->printInfo();
 
 	delete t;
@@ -262,6 +269,7 @@ void runTest(structureType type, std::string inputPath, std::string outputPath) 
 	t->load(inputPath);
 	auto end = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	t->updateVariables();
 	of << "Insert: " << endl
 		<< "\tChecks: " << t->getChecks() << endl
 		<< "\tSwaps: " << t->getSwaps() << endl
@@ -281,6 +289,7 @@ void runTest(structureType type, std::string inputPath, std::string outputPath) 
 	start = std::chrono::high_resolution_clock::now();
 	t->resetSwapsChecks();
 	t->searchFromFile(inputPath);
+	t->updateVariables();
 	end = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 	of << "Search: " << endl
@@ -294,6 +303,7 @@ void runTest(structureType type, std::string inputPath, std::string outputPath) 
 	t->deleteFromFile(inputPath);
 	end = std::chrono::high_resolution_clock::now();
 	duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	t->updateVariables();
 	of << "Delete: " << endl
 		<< "\tChecks: " << t->getChecks() << endl
 		<< "\tSwaps: " << t->getSwaps() << endl

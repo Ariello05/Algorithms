@@ -1,0 +1,15 @@
+Insert: 
+	Checks: 6321065
+	Swaps: 3002812
+	Time[ms]: 255
+
+Search: 
+	Checks: 5011820
+	Swaps: 0
+	Time[ms]: 267
+
+Delete: 
+	Checks: 22734537
+	Swaps: 3048862
+	Time[ms]: 720
+

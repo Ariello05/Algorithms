@@ -109,6 +109,9 @@ public:
 		}
 		file.close();
 	}
+	virtual void updateVariables() {
+
+	}
 	virtual std::string inOrder() {
 		inOrderCount++;
 		return "";
@@ -148,7 +151,7 @@ public:
 	int getChecks() {
 		return checks;
 	}
-	void resetSwapsChecks() {
+	virtual void resetSwapsChecks() {
 		swaps = 0;
 		checks = 0;
 	}

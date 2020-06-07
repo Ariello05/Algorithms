@@ -20,9 +20,11 @@ public:
 	virtual std::string min() override;
 	virtual std::string max() override;
 	virtual std::string successor(T f) override;
+	virtual void updateVariables() override;
+	virtual void resetSwapsChecks() override;
 private:
-	const int nt = 5;
-	const int m = 1500;
+	const int nt = 2; 
+	const int m = 2011;
 	std::pair<RB<T>,std::list<T>>* map;
 	int hash(T item);
 };
@@ -31,8 +33,10 @@ template<typename T>
 inline int HashMap<T>::hash(T item)
 {
 	int hash_sum = 0;
+	int order = 1;
 	for (int i = 0; i < item.length(); ++i) {
-		hash_sum += int(item[i]);
+		hash_sum += int(item[i]) * order;
+		order += 1;
 	}
 	hash_sum %= m;
 
@@ -57,7 +61,8 @@ inline void HashMap<T>::insert(T item)
 {
 	Tree<T>::insert(item);
 	int mapped = hash(item);
-	if (item.length() >= nt) {
+	if (item.length() > nt) {
+		
 		map[mapped].first.insert(item);
 	}
 	else {
@@ -71,7 +76,7 @@ inline void HashMap<T>::remove(T item)
 	Tree<T>::remove(item);
 	int mapped = hash(item);
 	
-	if (item.length() >= nt) {
+	if (item.length() > nt) {
 		auto initial_size = map[mapped].first.getSize();
 		map[mapped].first.remove(item);
 		if (initial_size != map[mapped].first.getSize()) {
@@ -82,8 +87,11 @@ inline void HashMap<T>::remove(T item)
 	else {
 		
 		auto start = map[mapped].second.begin();
+
 		while (start != map[mapped].second.end()) {
+			this->checks++;
 			if (*start == item) {
+				this->swaps++;
 				map[mapped].second.erase(start);
 				this->size--;
 				break;
@@ -98,12 +106,13 @@ inline bool HashMap<T>::search(T item)
 {
 	Tree<T>::search(item);
 	int mapped = hash(item);
-	if (item.length() >= nt) {
+	if (item.length() > nt) {
 		return map[mapped].first.search(item);
 	}
 	else {
 		auto start = map[mapped].second.begin();
 		while (start != map[mapped].second.end()) {
+			this->checks++;
 			if (*start == item) {
 				return true;
 			}
@@ -145,5 +154,25 @@ inline std::string HashMap<T>::successor(T f)
 {
 	Tree<T>::successor(f);
 	return std::string();
+}
+
+template<typename T>
+inline void HashMap<T>::updateVariables()
+{
+	for (int i = 0; i < m; ++i) {
+		this->swaps += map[i].first.getSwaps();
+		this->checks += map[i].first.getChecks();
+	}
+}
+
+template<typename T>
+inline void HashMap<T>::resetSwapsChecks()
+{
+	Tree<T>::resetSwapsChecks();
+	
+	for (int i = 0; i < m; ++i) {
+		map[i].first.resetSwapsChecks();
+		//std::cout << pair.first.getSwaps() << std::endl;
+	}
 }
 

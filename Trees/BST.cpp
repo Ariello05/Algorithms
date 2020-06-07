@@ -58,6 +58,7 @@ void BST<T>::remove(T str)
 	while (iter != nullptr) {
 		Tree<T>::checks+=2;
 		if (*iter == str) {
+			std::cout << "deleting" << std::endl;
 			if (Tree<T>::size > 0) {
 				Tree<T>::size--;
 			}
@@ -86,6 +87,11 @@ void BST<T>::remove(T str)
 			}
 			else if(iter->getRightNode() == nullptr) {//left children only
 				Tree<T>::checks+=2;
+				if (iter == top) {
+					top = iter->getLeftNode();
+					delete iter;
+					break;
+				}
 				if (*iter < *prev) {
 					prev->setLeftNode(iter->getLeftNode());
 				}
@@ -97,6 +103,11 @@ void BST<T>::remove(T str)
 			}
 			else if (iter->getLeftNode() == nullptr) {//right children only
 				Tree<T>::checks+=2;
+				if (iter == top) {
+					top = iter->getRightNode();
+					delete iter;
+					break;
+				}
 				if (*iter < *prev) {
 					prev->setLeftNode(iter->getRightNode());
 				}

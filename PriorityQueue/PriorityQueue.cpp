@@ -4,7 +4,7 @@ PriorityQueue::PriorityQueue(int n)
 	:max(n)
 {
 	size = 0;
-	tab = new PQData[n];//simplest
+	tab = new PQData<int>[n];//simplest
 }
 
 
@@ -15,11 +15,11 @@ PriorityQueue::~PriorityQueue()
 
 void PriorityQueue::insert(unsigned int p, int x)
 {
-	PQData data = PQData(p, x);
+	PQData<int> data = PQData<int>(p, x);
 	insert(data);
 }
 
-void PriorityQueue::insert(PQData data)
+void PriorityQueue::insert(PQData<int> data)
 {
 	if (size == max) {
 		throw std::runtime_error("Overflow");
@@ -33,7 +33,7 @@ void PriorityQueue::insert(PQData data)
 
 void PriorityQueue::priority(unsigned int p, int x)
 {
-	PQData pqd;
+	PQData<int> pqd;
 	for (int i = 0; i < size; ++i) {
 		pqd = tab[i];
 		if (pqd.value == x && pqd.priority > p) {
@@ -47,7 +47,7 @@ void PriorityQueue::priority(unsigned int p, int x)
 int PriorityQueue::top()
 {
 	if (size == 0) {
-		throw std::runtime_error("Empty");
+		throw EmptyException();
 	}
 
 	return tab[0].value;
@@ -56,7 +56,7 @@ int PriorityQueue::top()
 int PriorityQueue::pop()
 {
 	if (size == 0) {
-		throw std::runtime_error("Empty");
+		throw EmptyException();
 	}
 	int p = top();
 	tab[0] = tab[size-1];
@@ -81,12 +81,12 @@ void PriorityQueue::print()
 
 void PriorityQueue::swap(int i1, int i2)
 {
-	PQData buf = tab[i1];
+	PQData<int> buf = tab[i1];
 	tab[i1] = tab[i2];
 	tab[i2] = buf;
 }
 
-void PriorityQueue::bubbleUp(int i, PQData data)
+void PriorityQueue::bubbleUp(int i, PQData<int> data)
 {
 	int parentI = (i - 1) / 2;
 	while (parentI >= 0 && tab[parentI].priority > data.priority) {

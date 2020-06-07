@@ -16,6 +16,10 @@ public:
 	T value;
 };
 
+class EmptyException {
+
+};
+
 
 class PriorityQueue
 {
@@ -24,7 +28,7 @@ public:
 	~PriorityQueue();
 
 	void insert(unsigned int p, int x);
-	void insert(PQData data);
+	void insert(PQData<int> data);
 	/**
 		 for every key of value x sets new priority p if p is higher than current priority of the key
 	*/
@@ -38,10 +42,10 @@ public:
 
 private:
 	void swap(int i1, int i2);
-	void bubbleUp(int i, PQData data);
+	void bubbleUp(int i, PQData<int> data);
 	void bubbleDown(int i);
 
-	PQData * tab;
+	PQData<int>* tab;
 	int size;
 	const int max;
 };
